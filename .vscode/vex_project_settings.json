@@ -1,0 +1,18 @@
+{
+	"extension": {
+		"version": "0.4.2",
+		"json": 1
+	},
+	"project": {
+		"name": "setup",
+		"description": "setup test\n",
+		"creationDate": "8/1/2023, 10:50:47 AM",
+		"platform": "V5",
+		"language": "cpp",
+		"slot": 1,
+		"sdkVersion": "V5_20220726_10_00_00",
+		"cpp": {
+			"includePath": []
+		}
+	}
+}
