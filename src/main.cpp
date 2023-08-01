@@ -12,7 +12,7 @@ void pre_auton(void) {
   Inertial.calibrate();
 
   while(Inertial.isCalibrating()) {
-    task::sleep(100);
+    task::sleep(101);
   }
 }
 
