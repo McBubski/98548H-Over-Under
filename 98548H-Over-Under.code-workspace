@@ -4,5 +4,27 @@
 			"path": "."
 		}
 	],
-	"settings": {}
+	"settings": {
+		"files.associations": {
+			"*.tcc": "cpp",
+			"cctype": "cpp",
+			"chrono": "cpp",
+			"clocale": "cpp",
+			"cmath": "cpp",
+			"cstdarg": "cpp",
+			"cstdint": "cpp",
+			"cstdio": "cpp",
+			"cstdlib": "cpp",
+			"ctime": "cpp",
+			"cwchar": "cpp",
+			"exception": "cpp",
+			"initializer_list": "cpp",
+			"iosfwd": "cpp",
+			"limits": "cpp",
+			"new": "cpp",
+			"ratio": "cpp",
+			"type_traits": "cpp",
+			"typeinfo": "cpp"
+		}
+	}
 }

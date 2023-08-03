@@ -1,5 +1,6 @@
 
 #include "vex.h"
+#include "odometry.h"
 #include "graphics.h"
 
 using namespace vex;
@@ -38,6 +39,7 @@ int main() {
 
   pre_auton();
 
+  task odometryTask = task(positionTracking);
   task graphicsTask = task(updateScreen);
 
   while (true) {
