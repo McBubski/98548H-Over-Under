@@ -12,19 +12,25 @@ void pre_auton(void) {
   Inertial.calibrate();
 
   while(Inertial.isCalibrating()) {
-    task::sleep(101);
+    task::sleep(100);
   }
 }
+
+
 
 void autonomous(void) {
   
 }
+
+
 
 void usercontrol(void) {
   while (1) {
     wait(20, msec); 
   }
 }
+
+
 
 int main() {
   Competition.autonomous(autonomous);
