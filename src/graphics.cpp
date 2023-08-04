@@ -2,129 +2,185 @@
 #include "vex.h"
 
 using namespace vex;
+using ButtonCallback = std::function<void()>;
 
-class button {
+class Button {
     public:
-        int x;
-        int y;
-        int sizeX;
-        int sizeY;
-        bool pressing = false;
-        const char * col;
-        const char * text;
-        
-        void initialize(int startX, int startY, int startSizeX, int startSizeY, const char * buttonCol, const char * buttonText) {
-            x = startX;
-            y = startY;
-            sizeX = startSizeX;
-            sizeY = startSizeY;
-            col = buttonCol;
-            text = buttonText;
+        Button(int x_, int y_, int width_, int height_, const char* label_, const char* color_) {
+            x = x_;
+            y = y_;
+            width = width_;
+            height = height_;
+            label = label_;
+            color = color_;
+        }
+
+        void setOnClick(ButtonCallback onClick_) {
+            onClick = onClick_;
+        }
+
+        void checkClick(int touchX, int touchY) {
+            if (touchX >= x && touchX <= x + width) {
+                if (touchY >= y && touchY <= y + height) {
+                    if (onClick) {
+                        onClick();
+                    }
+                }
+            }
         }
 
         void display() {
-            Brain.Screen.setFillColor(col);
-            Brain.Screen.setPenWidth(3);
+            Brain.Screen.setPenColor(black);
+            Brain.Screen.setFillColor(color);
+            Brain.Screen.drawRectangle(x, y, width, height);
 
-            if (pressing) {
-                Brain.Screen.setPenColor("#FFBB00");
-            } else {
-                Brain.Screen.setPenColor(white);
-            }
-            
-            Brain.Screen.drawRectangle(x, y, sizeX, sizeY);
             Brain.Screen.setPenColor(white);
-
             Brain.Screen.printAt(
-                x + (sizeX/2) - (Brain.Screen.getStringWidth(text) / 2), 
-                y + (sizeY/2) + (Brain.Screen.getStringHeight(text) / 4), 
-                text
+                x + (width/2) - (Brain.Screen.getStringWidth(label)/2),
+                y + (height/2) + (Brain.Screen.getStringHeight(label)/4),
+                label
             );
         }
-
-        void checkPress() {
-            int pressX = Brain.Screen.xPosition();
-            int pressY = Brain.Screen.yPosition();
-
-            if (Brain.Screen.pressing()) {
-                if (pressX >= x && pressX <= x + sizeX) {
-                    if (pressY >= y && pressY <= y + sizeY) {
-                        pressing = true;
-                    }
-                }   
-            } else {
-                pressing = false;
-            }
-        }
+    private:
+        int x, y;
+        int width, height;
+        const char* label;
+        const char* color;
+        ButtonCallback onClick;
 };
 
-const int numOfButtons = 1;
-button buttons[numOfButtons];
+bool screenDebounce = false;
+char * screenWindow = "Main";
 
-button calibrateButton;
+void CalibrateInertial() {
+    Inertial.calibrate();
+}
+
+void OdometryWindow() {
+    screenWindow = "Odometry";
+}
+
+void MotorWindow() {
+    screenWindow = "Motors";
+}
+
+void ReturnToMainWindow() {
+    screenWindow = "Main";
+}
 
 int updateScreen() {
     Brain.Screen.render();
 
-    calibrateButton.initialize(130, 15, 120, 40, "#84C1E3", "Calibrate");
-    buttons[0] = calibrateButton;
+    Button calibrateInertialButton(125, 15, 140, 30, "Calibrate", "#03a1fc"); // Inertial Calibration Button
+    calibrateInertialButton.setOnClick(CalibrateInertial);
+
+    Button odometryWindowButton(125, 55, 140, 30, "Odometry", "#fcb603"); // Button To Switch To Odometry Menu
+    odometryWindowButton.setOnClick(OdometryWindow);
+
+    Button motorWindowButton(125, 95, 140, 30, "Motors", "#1cc94d");
+    motorWindowButton.setOnClick(MotorWindow);
+
+    Button returnToMainWindowButton(5, 10, 80, 30, "Return", "#ff0f0f"); // Return Button, Shown On All Menus (excluding Main)
+    returnToMainWindowButton.setOnClick(ReturnToMainWindow);
 
     while (true) {
-        Brain.Screen.setFillColor(black);
-        Brain.Screen.setPenColor(white);
+        if (screenWindow == "Main") {
+            Brain.Screen.setFillColor(black);
+            Brain.Screen.setPenColor(white);
 
-        // Team Logo
+            // Team Logo
 
-        Brain.Screen.setFont(mono40);
-        Brain.Screen.printAt(300, 45, "Revamped");
+            Brain.Screen.setFont(mono40);
+            Brain.Screen.printAt(300, 45, "Revamped");
 
-        Brain.Screen.setFont(mono20);
-        Brain.Screen.printAt(350, 20, "98548H");
+            Brain.Screen.setFont(mono20);
+            Brain.Screen.printAt(350, 20, "98548H");
 
-        // Odometry
+            Brain.Screen.drawLine(300, 50, 460, 50);
 
-        Brain.Screen.printAt(5, 15, "Odometry: ");
+            // Odometry
 
-        Brain.Screen.setPenColor("#FFBE0F");
-        Brain.Screen.printAt(15, 35, "X: ???");
-        Brain.Screen.printAt(15, 55, "Y: ???");
-        
-        // Inertial
+            Brain.Screen.printAt(5, 15, "Odometry: ");
 
-        Brain.Screen.setFont(mono20);
-        Brain.Screen.setPenColor(white);
-        Brain.Screen.printAt(5, 85, "Inertial:");
+            Brain.Screen.setPenColor("#FFBE0F");
+            Brain.Screen.printAt(15, 35, "X: ???");
+            Brain.Screen.printAt(15, 55, "Y: ???");
 
-        Brain.Screen.setFont(mono20);
-        if (Inertial.installed()) {
+            // Inertial
+
+            Brain.Screen.setFont(mono20);
+            Brain.Screen.setPenColor(white);
+            Brain.Screen.printAt(5, 85, "Inertial:");
+
+            Brain.Screen.setFont(mono20);
+            if (Inertial.installed()) {
+                if (Inertial.isCalibrating()) {
+                    Brain.Screen.setPenColor(yellow);
+                    Brain.Screen.printAt(15, 105, "Calibrating...");
+                } else {
+                    Brain.Screen.setPenColor(green);
+                    Brain.Screen.printAt(15, 105, "Ready");
+                }
+            } else {
+                Brain.Screen.setPenColor(red);
+                Brain.Screen.printAt(15, 105, "Not Found");
+            }
+
+            // Heading
+
+            Brain.Screen.setFont(mono20);
+            Brain.Screen.setPenColor(white);
+            Brain.Screen.printAt(5, 135, "Heading: ");
+
+            Brain.Screen.setPenColor("#0FFFED");
+            Brain.Screen.printAt(15, 155, "%.2f°", absoluteOrientation);
+
+            // Suggestions
+
+            Brain.Screen.setPenColor(white);
+            Brain.Screen.printAt(5, 185, "Suggestions:");
             Brain.Screen.setPenColor(green);
-            Brain.Screen.printAt(5, 105, "Ready");
+            Brain.Screen.printAt(15, 205, "None Found");
+
+            calibrateInertialButton.display();
+            odometryWindowButton.display();
+            motorWindowButton.display();
+
+        } else if (screenWindow == "Odometry") {
+            Brain.Screen.setFillColor(black);
+            Brain.Screen.printAt(10, 100, "Pretend a cool odometry menu is here :)");
+            
+            returnToMainWindowButton.display();
+        } else if (screenWindow == "Motors") {
+            Brain.Screen.setFillColor(black);
+            Brain.Screen.printAt(10, 100, "Pretend a menu for motors is here 0_0");
+            
+            returnToMainWindowButton.display(); 
+        }
+
+        if (Brain.Screen.pressing()) {
+            if (screenDebounce == false) {
+                screenDebounce = true;
+                int x = Brain.Screen.xPosition();
+                int y = Brain.Screen.yPosition();
+
+                if (screenWindow == "Main") {
+                    calibrateInertialButton.checkClick(x, y);
+                    odometryWindowButton.checkClick(x, y);
+                    motorWindowButton.checkClick(x, y);
+                    continue;
+                } else if (screenWindow = "Odometry") {
+                    returnToMainWindowButton.checkClick(x, y);
+                    continue;
+                } else if (screenWindow = "Motors") {
+                    returnToMainWindowButton.checkClick(x, y);
+                    continue;
+                }
+            }
         } else {
-            Brain.Screen.setPenColor(red);
-            Brain.Screen.printAt(5, 105, "Not Found");
+            screenDebounce = false;
         }
-
-        // Heading
-
-        Brain.Screen.setFont(mono20);
-        Brain.Screen.setPenColor(white);
-        Brain.Screen.printAt(5, 135, "Heading: ");
-
-        Brain.Screen.setPenColor("#0FFFED");
-        Brain.Screen.printAt(15, 155, "%.2f°", absoluteOrientation);
-
-        // Suggestions
-
-        Brain.Screen.setPenColor(white);
-        Brain.Screen.printAt(5, 185, "Suggestions:");
-        Brain.Screen.setPenColor(green);
-        Brain.Screen.printAt(5, 205, "None Found");
-
-        for (int i = 0; i < numOfButtons; i++) {
-            buttons[i].display();
-            buttons[i].checkPress();
-        }
-
+        
         Brain.Screen.render();
 
         wait(20, msec);

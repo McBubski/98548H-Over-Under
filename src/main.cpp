@@ -12,8 +12,13 @@ void pre_auton(void) {
 
   Inertial.calibrate();
 
-  while(Inertial.isCalibrating()) {
+  while(Inertial.isCalibrating()) {    
+    Brain.Screen.printAt(5, 15, "RevampedOS is launching...");
+    Brain.Screen.printAt(5, 35, "glhf");
+
     task::sleep(100);
+
+    Brain.Screen.clearScreen();
   }
 }
 
