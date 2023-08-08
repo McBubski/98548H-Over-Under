@@ -1,4 +1,5 @@
 #include "graphics.h"
+#include <string>
 #include "vex.h"
 
 using namespace vex;
@@ -52,20 +53,34 @@ class Button {
 bool screenDebounce = false;
 char * screenWindow = "Main";
 
+int frame = 0;
+
 void CalibrateInertial() {
     Inertial.calibrate();
 }
 
 void OdometryWindow() {
-    screenWindow = "Odometry";
+    if (screenWindow == "Main") {
+        screenWindow = "Odometry";
+    }
 }
 
 void MotorWindow() {
-    screenWindow = "Motors";
+    if (screenWindow == "Main") {
+        screenWindow = "Motors";
+    }
+}
+
+void RobotInfoWindow() {
+    if (screenWindow == "Main") {
+        screenWindow = "RobotInfo";
+    }
 }
 
 void ReturnToMainWindow() {
-    screenWindow = "Main";
+    if (screenWindow == "Odometry" || screenWindow == "Motors" || screenWindow == "RobotInfo") {
+        screenWindow = "Main";
+    }
 }
 
 int updateScreen() {
@@ -74,11 +89,14 @@ int updateScreen() {
     Button calibrateInertialButton(125, 15, 140, 30, "Calibrate", "#03a1fc"); // Inertial Calibration Button
     calibrateInertialButton.setOnClick(CalibrateInertial);
 
-    Button odometryWindowButton(125, 55, 140, 30, "Odometry", "#fcb603"); // Button To Switch To Odometry Menu
+    Button odometryWindowButton(125, 55, 140, 30, "Odometry", "#fcb603"); // Button To Switch To Odometry Window
     odometryWindowButton.setOnClick(OdometryWindow);
 
-    Button motorWindowButton(125, 95, 140, 30, "Motors", "#1cc94d");
+    Button motorWindowButton(125, 95, 140, 30, "Motors", "#1cc94d"); // Button To Switch To Motor Window
     motorWindowButton.setOnClick(MotorWindow);
+
+    Button robotInfoWindowButton(125, 135, 140, 30, "Robot Info", "#cf5df5"); // Button To Switch To Robot Info Window
+    robotInfoWindowButton.setOnClick(RobotInfoWindow);
 
     Button returnToMainWindowButton(5, 10, 80, 30, "Return", "#ff0f0f"); // Return Button, Shown On All Menus (excluding Main)
     returnToMainWindowButton.setOnClick(ReturnToMainWindow);
@@ -116,7 +134,7 @@ int updateScreen() {
             if (Inertial.installed()) {
                 if (Inertial.isCalibrating()) {
                     Brain.Screen.setPenColor(yellow);
-                    Brain.Screen.printAt(15, 105, "Calibrating...");
+                    Brain.Screen.printAt(15, 105, "Clbrtng...");
                 } else {
                     Brain.Screen.setPenColor(green);
                     Brain.Screen.printAt(15, 105, "Ready");
@@ -145,6 +163,7 @@ int updateScreen() {
             calibrateInertialButton.display();
             odometryWindowButton.display();
             motorWindowButton.display();
+            robotInfoWindowButton.display();
 
         } else if (screenWindow == "Odometry") {
             Brain.Screen.setFillColor(black);
@@ -156,6 +175,29 @@ int updateScreen() {
             Brain.Screen.printAt(10, 100, "Pretend a menu for motors is here 0_0");
             
             returnToMainWindowButton.display(); 
+        } else if (screenWindow == "RobotInfo") {
+            frame++;
+            if (frame == 18) {
+                frame = 0;
+            }
+            Brain.Screen.setFillColor(black);
+            Brain.Screen.setPenColor(white);
+
+            Brain.Screen.printAt(10, 60, "MicroSD Card: ");
+
+            if (Brain.SDcard.isInserted()) {
+                Brain.Screen.setPenColor(green);
+                Brain.Screen.printAt(20, 80, "Installed");
+            } else {
+                Brain.Screen.setPenColor(red);
+                Brain.Screen.printAt(20, 80, "Not Found");
+            }
+
+            returnToMainWindowButton.display();
+        } else {
+            Brain.Screen.setFillColor(black);
+            Brain.Screen.printAt(5, 15, "Woah! Something very bad happened.");
+            Brain.Screen.printAt(5, 35, "If you read this, please reset robot.");
         }
 
         if (Brain.Screen.pressing()) {
@@ -164,18 +206,11 @@ int updateScreen() {
                 int x = Brain.Screen.xPosition();
                 int y = Brain.Screen.yPosition();
 
-                if (screenWindow == "Main") {
-                    calibrateInertialButton.checkClick(x, y);
-                    odometryWindowButton.checkClick(x, y);
-                    motorWindowButton.checkClick(x, y);
-                    continue;
-                } else if (screenWindow = "Odometry") {
-                    returnToMainWindowButton.checkClick(x, y);
-                    continue;
-                } else if (screenWindow = "Motors") {
-                    returnToMainWindowButton.checkClick(x, y);
-                    continue;
-                }
+                calibrateInertialButton.checkClick(x, y);
+                odometryWindowButton.checkClick(x, y);
+                motorWindowButton.checkClick(x, y);
+                robotInfoWindowButton.checkClick(x, y);
+                returnToMainWindowButton.checkClick(x, y);
             }
         } else {
             screenDebounce = false;

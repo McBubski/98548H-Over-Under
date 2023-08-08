@@ -28,10 +28,24 @@ void autonomous(void) {
   
 }
 
+bool cataSpinning = false;
 
+void switchCata() {
+  cataSpinning = !cataSpinning;
+}
 
 void usercontrol(void) {
+  catapultLeft.setStopping(brake);
+  catapultRight.setStopping(brake);
+  Controller.ButtonA.pressed(switchCata);
   while (1) {
+    if (Controller.ButtonR1.pressing()) {
+      catapultLeft.spin(forward, 100, percent);
+      catapultRight.spin(forward, 100, percent);
+    } else {
+      catapultLeft.stop();
+      catapultRight.stop();
+    }
     wait(20, msec); 
   }
 }

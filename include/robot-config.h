@@ -4,6 +4,9 @@ extern brain Brain;
 extern controller Controller;
 extern inertial Inertial;
 
+extern motor catapultRight;
+extern motor catapultLeft;
+
 /**
  * Used to initialize code/tasks/devices added using tools in VEXcode Pro.
  *
