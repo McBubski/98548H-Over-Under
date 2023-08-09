@@ -1,5 +1,5 @@
 #include "graphics.h"
-#include <string>
+#include "odometry.h"
 #include "vex.h"
 
 using namespace vex;
@@ -53,30 +53,25 @@ class Button {
 bool screenDebounce = false;
 char * screenWindow = "Main";
 
-int frame = 0;
-
 void CalibrateInertial() {
     Inertial.calibrate();
 }
 
-void OdometryWindow() {
+void SwitchToOdometryWindow() {
     if (screenWindow == "Main") {
         screenWindow = "Odometry";
     }
 }
-
-void MotorWindow() {
+void SwitchToMotorWindow() {
     if (screenWindow == "Main") {
         screenWindow = "Motors";
     }
 }
-
-void RobotInfoWindow() {
+void SwitchToRobotInfoWindow() {
     if (screenWindow == "Main") {
         screenWindow = "RobotInfo";
     }
 }
-
 void ReturnToMainWindow() {
     if (screenWindow == "Odometry" || screenWindow == "Motors" || screenWindow == "RobotInfo") {
         screenWindow = "Main";
@@ -90,13 +85,13 @@ int updateScreen() {
     calibrateInertialButton.setOnClick(CalibrateInertial);
 
     Button odometryWindowButton(125, 55, 140, 30, "Odometry", "#fcb603"); // Button To Switch To Odometry Window
-    odometryWindowButton.setOnClick(OdometryWindow);
+    odometryWindowButton.setOnClick(SwitchToOdometryWindow);
 
     Button motorWindowButton(125, 95, 140, 30, "Motors", "#1cc94d"); // Button To Switch To Motor Window
-    motorWindowButton.setOnClick(MotorWindow);
+    motorWindowButton.setOnClick(SwitchToMotorWindow);
 
     Button robotInfoWindowButton(125, 135, 140, 30, "Robot Info", "#cf5df5"); // Button To Switch To Robot Info Window
-    robotInfoWindowButton.setOnClick(RobotInfoWindow);
+    robotInfoWindowButton.setOnClick(SwitchToRobotInfoWindow);
 
     Button returnToMainWindowButton(5, 10, 80, 30, "Return", "#ff0f0f"); // Return Button, Shown On All Menus (excluding Main)
     returnToMainWindowButton.setOnClick(ReturnToMainWindow);
@@ -121,8 +116,8 @@ int updateScreen() {
             Brain.Screen.printAt(5, 15, "Odometry: ");
 
             Brain.Screen.setPenColor("#FFBE0F");
-            Brain.Screen.printAt(15, 35, "X: ???");
-            Brain.Screen.printAt(15, 55, "Y: ???");
+            Brain.Screen.printAt(15, 35, "X: %.1f", globalXPos);
+            Brain.Screen.printAt(15, 55, "Y: %.1f", globalYPos);
 
             // Inertial
 
@@ -151,7 +146,7 @@ int updateScreen() {
             Brain.Screen.printAt(5, 135, "Heading: ");
 
             Brain.Screen.setPenColor("#0FFFED");
-            Brain.Screen.printAt(15, 155, "%.2f°", absoluteOrientation);
+            Brain.Screen.printAt(15, 155, "%.1f°", (absoluteOrientation * 180 / M_PI));
 
             // Suggestions
 
@@ -166,9 +161,48 @@ int updateScreen() {
             robotInfoWindowButton.display();
 
         } else if (screenWindow == "Odometry") {
+            float robotSize = 10;
+
+            Brain.Screen.setFillColor("#c4c4c4");
+            Brain.Screen.drawRectangle(262, 22, 194, 194);
+            Brain.Screen.drawImageFromFile("field.png", 260, 20);
+
+            float XOnBrainScreen = 360 + (1.39 * globalXPos);
+            float YOnbrainScreen = 120 + (-1.39 * globalYPos);
+
+            float lineOffset1 = sqrt(2) * robotSize * cos(-absoluteOrientation + M_PI_4);
+            float lineOffset2 = sqrt(2) * robotSize * cos(-absoluteOrientation - M_PI_4);
+
+            float headingX = 15 * cos(absoluteOrientation - M_PI_2);
+            float headingY = 15 * sin(absoluteOrientation - M_PI_2);
+
+            Brain.Screen.setPenColor(black);
+            Brain.Screen.setPenWidth(4);
+
+            Brain.Screen.drawLine(XOnBrainScreen + lineOffset1, YOnbrainScreen - lineOffset2, XOnBrainScreen + lineOffset2, YOnbrainScreen + lineOffset1);
+            Brain.Screen.drawLine(XOnBrainScreen + lineOffset2, YOnbrainScreen + lineOffset1, XOnBrainScreen - lineOffset1, YOnbrainScreen + lineOffset2);
+            Brain.Screen.drawLine(XOnBrainScreen - lineOffset1, YOnbrainScreen + lineOffset2, XOnBrainScreen - lineOffset2, YOnbrainScreen - lineOffset1);
+            Brain.Screen.drawLine(XOnBrainScreen - lineOffset2, YOnbrainScreen - lineOffset1, XOnBrainScreen + lineOffset1, YOnbrainScreen - lineOffset2);
+
+            Brain.Screen.setPenColor(red);
+            Brain.Screen.setPenWidth(4);
+            Brain.Screen.drawLine(XOnBrainScreen, YOnbrainScreen, XOnBrainScreen + headingX, YOnbrainScreen + headingY);
+
             Brain.Screen.setFillColor(black);
-            Brain.Screen.printAt(10, 100, "Pretend a cool odometry menu is here :)");
-            
+            Brain.Screen.setPenColor(white);
+            Brain.Screen.printAt(5, 60, "Position: ");
+
+            Brain.Screen.setPenColor("#FFBE0F");
+            Brain.Screen.printAt(15, 80, "X: %.1f", globalXPos);
+            Brain.Screen.printAt(15, 100, "Y: %.1f", globalYPos);
+
+            Brain.Screen.setFont(mono20);
+            Brain.Screen.setPenColor(white);
+            Brain.Screen.printAt(5, 120, "Heading: ");
+
+            Brain.Screen.setPenColor("#0FFFED");
+            Brain.Screen.printAt(15, 140, "%.1f°", (absoluteOrientation * 180 / M_PI));
+
             returnToMainWindowButton.display();
         } else if (screenWindow == "Motors") {
             Brain.Screen.setFillColor(black);
@@ -176,10 +210,6 @@ int updateScreen() {
             
             returnToMainWindowButton.display(); 
         } else if (screenWindow == "RobotInfo") {
-            frame++;
-            if (frame == 18) {
-                frame = 0;
-            }
             Brain.Screen.setFillColor(black);
             Brain.Screen.setPenColor(white);
 
@@ -192,6 +222,25 @@ int updateScreen() {
                 Brain.Screen.setPenColor(red);
                 Brain.Screen.printAt(20, 80, "Not Found");
             }
+
+            Brain.Screen.setPenColor(white);
+            Brain.Screen.printAt(10, 120, "Battery: ");
+
+            int batteryCapacity = Brain.Battery.capacity(percent);
+            if (batteryCapacity > 50) {
+                Brain.Screen.setPenColor(green);
+            } else if (batteryCapacity > 20 && batteryCapacity < 50) {
+                Brain.Screen.setPenColor(yellow);
+            } else if (batteryCapacity < 20) {
+                Brain.Screen.setPenColor(red);
+            }
+            
+            Brain.Screen.printAt(20, 140, "%d%c", batteryCapacity, '%');
+
+            Brain.Screen.setPenColor(white);
+            Brain.Screen.printAt(10, 180, "Voltage: ");
+            Brain.Screen.setPenColor(green);
+            Brain.Screen.printAt(20, 200, "%.1f%c", Brain.Battery.voltage(volt), 'V');
 
             returnToMainWindowButton.display();
         } else {

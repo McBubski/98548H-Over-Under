@@ -24,7 +24,8 @@
 			"new": "cpp",
 			"ratio": "cpp",
 			"type_traits": "cpp",
-			"typeinfo": "cpp"
+			"typeinfo": "cpp",
+			"functional": "cpp"
 		}
 	}
 }

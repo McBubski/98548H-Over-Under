@@ -1,5 +1,5 @@
 #include "vex.h"
-#include <functional>
 #include "odometry.h"
+#include <functional>
 
 int updateScreen();

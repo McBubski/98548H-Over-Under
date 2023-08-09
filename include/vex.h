@@ -9,6 +9,7 @@
 //
 #include <stdio.h>
 #include <stdlib.h>
+#include <cmath>
 #include <string>
 
 #include "v5.h"
