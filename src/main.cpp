@@ -20,6 +20,9 @@ void pre_auton(void) {
 
     Brain.Screen.clearScreen();
   }
+
+  ForwardTrackingWheel.resetPosition();
+  SideTrackingWheel.resetPosition();
 }
 
 
@@ -28,24 +31,43 @@ void autonomous(void) {
   
 }
 
-bool cataSpinning = false;
+bool flywheelSpinning = false;
 
 void switchCata() {
-  cataSpinning = !cataSpinning;
+  flywheelSpinning = !flywheelSpinning;
 }
-
 void usercontrol(void) {
-  flyWheel1.setStopping(coast);
-  flyWheel2.setStopping(coast);
+  leftDrive.setStopping(coast);
+  rightDrive.setStopping(coast);
+
+  intakeLeft.setStopping(coast);
+  intakeRight.setStopping(coast);
+
+  flyWheelBottom.setStopping(coast);
+  flyWheelTop.setStopping(coast);
+
+  Controller.ButtonL2.pressed(switchCata);
+
   while (1) {
+    leftDrive.spin(forward, Controller.Axis3.position(percent), percent);
+    rightDrive.spin(forward, Controller.Axis2.position(percent), percent);
+
     if (Controller.ButtonR2.pressing()) {
-      flyWheel1.spin(forward, 100, percent);
-      flyWheel2.spin(forward, 100, percent);
+      intakeLeft.spin(forward, 100, percent);
+      intakeRight.spin(forward, 100, percent);
     } else {
-      flyWheel1.stop();
-      flyWheel2.stop();
+      intakeLeft.stop();
+      intakeRight.stop();
     }
-    wait(20, msec); 
+
+    if (flywheelSpinning) {
+      flyWheelBottom.spin(forward, 100, percent);
+      flyWheelTop.spin(forward, 100, percent);
+    } else {
+      flyWheelBottom.stop();
+      flyWheelTop.stop();
+    }
+    wait(20, msec);
   }
 }
 

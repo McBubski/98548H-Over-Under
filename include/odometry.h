@@ -1,6 +1,8 @@
-extern float absoluteOrientation;
+#include "vex.h";
 
-extern float globalXPos;
-extern float globalYPos;
+extern double absoluteOrientation;
+
+extern double globalXPos;
+extern double globalYPos;
 
 int positionTracking();

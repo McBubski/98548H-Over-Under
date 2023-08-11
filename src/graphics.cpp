@@ -207,11 +207,15 @@ int updateScreen() {
             Brain.Screen.setPenColor("#0FFFED");
             Brain.Screen.printAt(15, 140, "%.1f°", (absoluteOrientation * 180 / M_PI));
 
+            Brain.Screen.printAt(15, 160, "F: %.1f", ForwardTrackingWheel.position(degrees));
+            Brain.Screen.printAt(15, 180, "S: %.1f", SideTrackingWheel.position(degrees));
+
             returnToMainWindowButton.display();
         } else if (screenWindow == "Motors") {
             Brain.Screen.setFillColor(black);
             Brain.Screen.setPenColor(white);
             
+            returnToMainWindowButton.display();
         } else if (screenWindow == "RobotInfo") {
             Brain.Screen.setFillColor(black);
             Brain.Screen.setPenColor(white);
