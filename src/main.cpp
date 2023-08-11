@@ -35,16 +35,15 @@ void switchCata() {
 }
 
 void usercontrol(void) {
-  catapultLeft.setStopping(brake);
-  catapultRight.setStopping(brake);
-  Controller.ButtonA.pressed(switchCata);
+  flyWheel1.setStopping(coast);
+  flyWheel2.setStopping(coast);
   while (1) {
-    if (Controller.ButtonR1.pressing()) {
-      catapultLeft.spin(forward, 100, percent);
-      catapultRight.spin(forward, 100, percent);
+    if (Controller.ButtonR2.pressing()) {
+      flyWheel1.spin(forward, 100, percent);
+      flyWheel2.spin(forward, 100, percent);
     } else {
-      catapultLeft.stop();
-      catapultRight.stop();
+      flyWheel1.stop();
+      flyWheel2.stop();
     }
     wait(20, msec); 
   }

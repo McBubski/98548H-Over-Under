@@ -7,8 +7,8 @@ brain Brain;
 controller Controller;
 inertial Inertial = inertial(PORT4);
 
-motor catapultRight = motor(PORT7, ratio18_1, false);
-motor catapultLeft = motor(PORT6, ratio18_1, true);
+motor flyWheel1 = motor(PORT16, ratio36_1, false);
+motor flyWheel2 = motor(PORT17, ratio36_1, false);
 
 /**
  * Used to initialize code/tasks/devices added using tools in VEXcode Pro.

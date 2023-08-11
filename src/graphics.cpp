@@ -173,8 +173,12 @@ int updateScreen() {
             float lineOffset1 = sqrt(2) * robotSize * cos(-absoluteOrientation + M_PI_4);
             float lineOffset2 = sqrt(2) * robotSize * cos(-absoluteOrientation - M_PI_4);
 
-            float headingX = 15 * cos(absoluteOrientation - M_PI_2);
-            float headingY = 15 * sin(absoluteOrientation - M_PI_2);
+            float headingX = cos(absoluteOrientation - M_PI_2);
+            float headingY = sin(absoluteOrientation - M_PI_2);
+
+            Brain.Screen.setPenColor(cyan);
+            Brain.Screen.setPenWidth(robotSize * 2 - 2);
+            Brain.Screen.drawLine(XOnBrainScreen - (headingX * 8), YOnbrainScreen - (headingY * 8), XOnBrainScreen + (headingX * 8), YOnbrainScreen + (headingY * 8));
 
             Brain.Screen.setPenColor(black);
             Brain.Screen.setPenWidth(4);
@@ -186,7 +190,7 @@ int updateScreen() {
 
             Brain.Screen.setPenColor(red);
             Brain.Screen.setPenWidth(4);
-            Brain.Screen.drawLine(XOnBrainScreen, YOnbrainScreen, XOnBrainScreen + headingX, YOnbrainScreen + headingY);
+            Brain.Screen.drawLine(XOnBrainScreen, YOnbrainScreen, XOnBrainScreen + (headingX * 15), YOnbrainScreen + (headingY * 15));
 
             Brain.Screen.setFillColor(black);
             Brain.Screen.setPenColor(white);
@@ -206,9 +210,8 @@ int updateScreen() {
             returnToMainWindowButton.display();
         } else if (screenWindow == "Motors") {
             Brain.Screen.setFillColor(black);
-            Brain.Screen.printAt(10, 100, "Pretend a menu for motors is here 0_0");
+            Brain.Screen.setPenColor(white);
             
-            returnToMainWindowButton.display(); 
         } else if (screenWindow == "RobotInfo") {
             Brain.Screen.setFillColor(black);
             Brain.Screen.setPenColor(white);
