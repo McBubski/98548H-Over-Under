@@ -5,25 +5,24 @@ extern controller Controller;
 extern inertial Inertial;
 
 extern motor driveFL;
-extern motor driveML;
 extern motor driveBL;
 
 extern motor_group leftDrive;
 
 extern motor driveFR;
-extern motor driveMR;
 extern motor driveBR;
 
 extern motor_group rightDrive;
 
-extern motor flyWheelTop;
-extern motor flyWheelBottom;
+extern motor liftLeft;
+extern motor liftRight;
 
-extern motor intakeLeft;
-extern motor intakeRight;
+extern motor_group lift;
 
 extern rotation ForwardTrackingWheel;
 extern rotation SideTrackingWheel;
+
+extern digital_out wingPneumatics;
 
 /**
  * Used to initialize code/tasks/devices added using tools in VEXcode Pro.

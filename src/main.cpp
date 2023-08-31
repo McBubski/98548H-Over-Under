@@ -28,45 +28,35 @@ void pre_auton(void) {
 
 
 void autonomous(void) {
-  
+  wait(45, seconds);
+  leftDrive.spin(forward, 50, percent);
+  rightDrive.spin(forward, 50, percent);
+  wait(10, seconds);
+  leftDrive.spin(reverse, 100, percent);
+  rightDrive.spin(reverse, 100, percent);
 }
 
-bool flywheelSpinning = false;
-
-void switchCata() {
-  flywheelSpinning = !flywheelSpinning;
-}
 void usercontrol(void) {
   leftDrive.setStopping(coast);
   rightDrive.setStopping(coast);
 
-  intakeLeft.setStopping(coast);
-  intakeRight.setStopping(coast);
-
-  flyWheelBottom.setStopping(coast);
-  flyWheelTop.setStopping(coast);
-
-  Controller.ButtonL2.pressed(switchCata);
+  lift.setStopping(brake);
 
   while (1) {
-    leftDrive.spin(forward, Controller.Axis3.position(percent), percent);
-    rightDrive.spin(forward, Controller.Axis2.position(percent), percent);
+    float joystickLeft = Controller.Axis3.position(percent);
+    float joystickRight = Controller.Axis2.position(percent);
+
+    leftDrive.spin(forward, joystickLeft, percent);
+    rightDrive.spin(forward, joystickRight, percent);
 
     if (Controller.ButtonR2.pressing()) {
-      intakeLeft.spin(forward, 100, percent);
-      intakeRight.spin(forward, 100, percent);
+      lift.spin(forward, 100, percent);
+    } else if (Controller.ButtonR1.pressing()) {
+      lift.spin(reverse, 100, percent);
     } else {
-      intakeLeft.stop();
-      intakeRight.stop();
+      lift.stop();
     }
 
-    if (flywheelSpinning) {
-      flyWheelBottom.spin(forward, 100, percent);
-      flyWheelTop.spin(forward, 100, percent);
-    } else {
-      flyWheelBottom.stop();
-      flyWheelTop.stop();
-    }
     wait(20, msec);
   }
 }
