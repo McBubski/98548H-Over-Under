@@ -6,23 +6,25 @@ extern inertial Inertial;
 
 extern motor driveFL;
 extern motor driveBL;
-
 extern motor_group leftDrive;
 
 extern motor driveFR;
 extern motor driveBR;
-
 extern motor_group rightDrive;
 
 extern motor liftLeft;
 extern motor liftRight;
-
 extern motor_group lift;
 
-extern rotation ForwardTrackingWheel;
-extern rotation SideTrackingWheel;
+extern motor puncher;
+extern motor triball_arm;
 
-extern digital_out wingPneumatics;
+extern smartdrive drive;
+
+extern rotation ForwardTrackingWheel;
+extern rotation LiftPotentiometer;
+
+extern digital_out elevationPneumatics;
 
 /**
  * Used to initialize code/tasks/devices added using tools in VEXcode Pro.

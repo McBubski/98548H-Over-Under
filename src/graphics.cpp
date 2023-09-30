@@ -1,5 +1,6 @@
 #include "graphics.h"
 #include "odometry.h"
+#include "autonomous.h"
 #include "vex.h"
 
 using namespace vex;
@@ -78,6 +79,10 @@ void ReturnToMainWindow() {
     }
 }
 
+void switchAuton() {
+    
+}
+
 int updateScreen() {
     Brain.Screen.render();
 
@@ -96,20 +101,27 @@ int updateScreen() {
     Button returnToMainWindowButton(5, 10, 80, 30, "Return", "#ff0f0f"); // Return Button, Shown On All Menus (excluding Main)
     returnToMainWindowButton.setOnClick(ReturnToMainWindow);
 
+
+    Button autonLeft(275, 95, 20, 30, "<", "#E93030");
+    autonLeft.setOnClick(switchAuton);
+
+    Button autonRight(453, 95, 20, 30, ">", "#E93030");
+    autonRight.setOnClick(switchAuton);
+
     while (true) {
         if (screenWindow == "Main") {
             Brain.Screen.setFillColor(black);
             Brain.Screen.setPenColor(white);
 
             // Team Logo
-
+            
             Brain.Screen.setFont(mono40);
-            Brain.Screen.printAt(300, 45, "Revamped");
+            Brain.Screen.printAt(290, 55, "Revamped");
 
             Brain.Screen.setFont(mono20);
-            Brain.Screen.printAt(350, 20, "98548H");
+            Brain.Screen.printAt(340, 30, "98548H");
 
-            Brain.Screen.drawLine(300, 50, 460, 50);
+            Brain.Screen.drawLine(290, 60, 460, 60);
 
             // Odometry
 
@@ -159,6 +171,20 @@ int updateScreen() {
             odometryWindowButton.display();
             motorWindowButton.display();
             robotInfoWindowButton.display();
+            autonLeft.display();
+            autonRight.display();
+
+            // Auton Selector
+
+            Brain.Screen.setFillColor(black);
+            Brain.Screen.setPenColor(white);
+
+            Brain.Screen.setFont(mono20);
+            Brain.Screen.printAt(320, 90, "Autonomous:");
+
+            Brain.Screen.setFont(mono30);
+            Brain.Screen.printAt(305, 117, "Home Side");
+            Brain.Screen.drawLine(305, 122, 443, 122);
 
         } else if (screenWindow == "Odometry") {
             float robotSize = 10;
@@ -208,7 +234,6 @@ int updateScreen() {
             Brain.Screen.printAt(15, 140, "%.1f°", (absoluteOrientation * 180 / M_PI));
 
             Brain.Screen.printAt(15, 160, "F: %.1f", ForwardTrackingWheel.position(degrees));
-            Brain.Screen.printAt(15, 180, "S: %.1f", SideTrackingWheel.position(degrees));
 
             returnToMainWindowButton.display();
         } else if (screenWindow == "Motors") {
@@ -267,6 +292,9 @@ int updateScreen() {
                 motorWindowButton.checkClick(x, y);
                 robotInfoWindowButton.checkClick(x, y);
                 returnToMainWindowButton.checkClick(x, y);
+
+                autonLeft.checkClick(x, y);
+                autonRight.checkClick(x, y);
             }
         } else {
             screenDebounce = false;
