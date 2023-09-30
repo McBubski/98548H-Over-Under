@@ -1,4 +1,4 @@
-#include "vex.h";
+#include "vex.h"
 
 extern double absoluteOrientation;
 

@@ -25,7 +25,11 @@
 			"ratio": "cpp",
 			"type_traits": "cpp",
 			"typeinfo": "cpp",
-			"functional": "cpp"
+			"functional": "cpp",
+			"array": "cpp",
+			"stdexcept": "cpp",
+			"tuple": "cpp",
+			"utility": "cpp"
 		}
 	}
 }

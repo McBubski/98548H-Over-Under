@@ -1,6 +1,9 @@
 #include "vex.h"
-#include "odometry.h"
-#include "graphics.h"
+#include "Autonomous/odometry.h"
+#include "Autonomous/autonomous.h"
+#include "Autonomous/auton-functions.h"
+#include "Graphics/graphics.h"
+#include "Driver/drive-functions.h"
 
 using namespace vex;
 
@@ -8,38 +11,36 @@ competition Competition;
 
 void pre_auton(void) {
   vexcodeInit();
-
-  Inertial.calibrate();
-
-  while(Inertial.isCalibrating()) {    
-    Brain.Screen.printAt(5, 15, "RevampedOS is launching..."); // Unneccesary, but looks cooler than it is
-    Brain.Screen.printAt(5, 35, "glhf");
-
-    task::sleep(100);
-
-    Brain.Screen.clearScreen();
-  }
-
-  ForwardTrackingWheel.resetPosition();
-  LiftPotentiometer.setPosition(5, degrees);
+  initializeRobot();
 }
 
+void autonomous(void) {
+  leftDrive.setStopping(brake);
+  rightDrive.setStopping(brake);
+  if (autonPath == 1) { // Skills
+      skills();
+  }
+}
 
 bool pneumaticsState = false;
 bool puncherRunning = false;
 bool liftMoving = false;
 bool armDown = false;
 
-void autonomous(void) {
-  puncher.spin(forward, 80, percent);
-}
-
 void switchPneumatics() { // Toggle Pneumatics State
-  pneumaticsState = !pneumaticsState;
+  if (pneumaticsState == false) {
+    pneumaticsState = true;
+  } else {
+    pneumaticsState = false;
+  }
 }
 
 void togglePuncher() { // Toggle Puncher State
-  puncherRunning = !puncherRunning;
+   if (puncherRunning == false) {
+    puncherRunning = true;
+  } else {
+    puncherRunning = false;
+  }
 }
 
 void startLift() { // Begins arm lift to correct height.
@@ -47,9 +48,12 @@ void startLift() { // Begins arm lift to correct height.
 }
 
 void toggleArm() {
-  armDown = !armDown;
+  if (armDown == false) {
+    armDown = true;
+  } else {
+    armDown = false;
+  }
 }
-
 
 void drivercontrol(void) {
   leftDrive.setStopping(coast);
@@ -74,21 +78,19 @@ void drivercontrol(void) {
     rightDrive.spin(forward, joystickRight, pct);
 
 
-    if (Controller.ButtonR1.pressing()) { // Lift Controls
+    if (Controller.ButtonR1.pressing()) { // Moves Lift Up
       liftMoving = false;
-      liftLeft.spin(forward, 12, volt);
-      liftRight.spin(forward, 12, volt);
-    } else if (Controller.ButtonR2.pressing()) {
+      lift.spin(forward, 100, percent);
+    } else if (Controller.ButtonR2.pressing()) { // Moves Lift Down
       liftMoving = false;
-      liftLeft.spin(reverse, 12, volt);
-      liftRight.spin(reverse, 12, volt);
+      lift.spin(reverse, 100, percent);
     } else {
       if (!liftMoving) {
         lift.stop();
       }
     }
 
-    if (puncherRunning) { // Puncher Controls
+    if (Controller.ButtonL2.pressing()) { // Puncher Controls
       puncher.spin(forward, 75, percent);
     } else {
       puncher.stop();

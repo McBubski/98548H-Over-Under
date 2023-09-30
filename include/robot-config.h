@@ -22,6 +22,7 @@ extern motor triball_arm;
 extern smartdrive drive;
 
 extern rotation ForwardTrackingWheel;
+extern rotation SidewaysTrackingWheel;
 extern rotation LiftPotentiometer;
 
 extern digital_out elevationPneumatics;

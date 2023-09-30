@@ -25,6 +25,7 @@ motor triball_arm = motor(PORT14, ratio18_1, false);
 smartdrive drive = smartdrive(leftDrive, rightDrive, Inertial, 12.56, 11.625, 10, distanceUnits::in);
 
 rotation ForwardTrackingWheel = rotation(PORT7, false);
+rotation SidewaysTrackingWheel = rotation(PORT12, true);
 rotation LiftPotentiometer = rotation(PORT5, true);
 
 digital_out elevationPneumatics = digital_out(Brain.ThreeWirePort.B);

@@ -1,7 +1,11 @@
-#include "graphics.h"
-#include "odometry.h"
-#include "autonomous.h"
+#include "Graphics/graphics.h"
+
+#include "Autonomous/odometry.h"
+#include "Autonomous/autonomous.h"
+#include "Autonomous/auton-functions.h"
+
 #include "vex.h"
+#include <functional>
 
 using namespace vex;
 using ButtonCallback = std::function<void()>;
@@ -79,8 +83,18 @@ void ReturnToMainWindow() {
     }
 }
 
-void switchAuton() {
-    
+void switchAutonBackward() {
+    autonPath--;
+    if (autonPath < 1) {
+        autonPath = 3;
+    }
+}
+
+void switchAutonForward() {
+  autonPath++;
+    if (autonPath > 3) {
+        autonPath = 1;
+    }  
 }
 
 int updateScreen() {
@@ -103,10 +117,10 @@ int updateScreen() {
 
 
     Button autonLeft(275, 95, 20, 30, "<", "#E93030");
-    autonLeft.setOnClick(switchAuton);
+    autonLeft.setOnClick(switchAutonBackward);
 
     Button autonRight(453, 95, 20, 30, ">", "#E93030");
-    autonRight.setOnClick(switchAuton);
+    autonRight.setOnClick(switchAutonForward);
 
     while (true) {
         if (screenWindow == "Main") {
@@ -180,10 +194,17 @@ int updateScreen() {
             Brain.Screen.setPenColor(white);
 
             Brain.Screen.setFont(mono20);
+            
             Brain.Screen.printAt(320, 90, "Autonomous:");
 
             Brain.Screen.setFont(mono30);
-            Brain.Screen.printAt(305, 117, "Home Side");
+            if (autonPath == 1) {
+                Brain.Screen.printAt(305, 117, "Home Side");
+            } else if (autonPath == 2) {
+                Brain.Screen.printAt(305, 117, "Away Side");
+            } else if (autonPath == 3) {
+                Brain.Screen.printAt(330, 117, "Skills");
+            }
             Brain.Screen.drawLine(305, 122, 443, 122);
 
         } else if (screenWindow == "Odometry") {
@@ -195,6 +216,10 @@ int updateScreen() {
 
             float XOnBrainScreen = 360 + (1.39 * globalXPos);
             float YOnbrainScreen = 120 + (-1.39 * globalYPos);
+
+            Brain.Screen.setFillColor(red);
+            Brain.Screen.setPenWidth(0);
+            Brain.Screen.drawCircle(360 + 1.39 * targetX, 120 -1.39 * targetY, 4);
 
             float lineOffset1 = sqrt(2) * robotSize * cos(-absoluteOrientation + M_PI_4);
             float lineOffset2 = sqrt(2) * robotSize * cos(-absoluteOrientation - M_PI_4);
@@ -214,9 +239,7 @@ int updateScreen() {
             Brain.Screen.drawLine(XOnBrainScreen - lineOffset1, YOnbrainScreen + lineOffset2, XOnBrainScreen - lineOffset2, YOnbrainScreen - lineOffset1);
             Brain.Screen.drawLine(XOnBrainScreen - lineOffset2, YOnbrainScreen - lineOffset1, XOnBrainScreen + lineOffset1, YOnbrainScreen - lineOffset2);
 
-            Brain.Screen.setPenColor(red);
-            Brain.Screen.setPenWidth(4);
-            Brain.Screen.drawLine(XOnBrainScreen, YOnbrainScreen, XOnBrainScreen + (headingX * 15), YOnbrainScreen + (headingY * 15));
+            Brain.Screen.setFont(mono20);
 
             Brain.Screen.setFillColor(black);
             Brain.Screen.setPenColor(white);
@@ -226,14 +249,29 @@ int updateScreen() {
             Brain.Screen.printAt(15, 80, "X: %.1f", globalXPos);
             Brain.Screen.printAt(15, 100, "Y: %.1f", globalYPos);
 
-            Brain.Screen.setFont(mono20);
+            Brain.Screen.setFillColor(black);
             Brain.Screen.setPenColor(white);
-            Brain.Screen.printAt(5, 120, "Heading: ");
+            Brain.Screen.printAt(5, 120, "Target: ");
 
-            Brain.Screen.setPenColor("#0FFFED");
-            Brain.Screen.printAt(15, 140, "%.1f°", (absoluteOrientation * 180 / M_PI));
+            Brain.Screen.setPenColor("#3099E9");
+            Brain.Screen.printAt(15, 140, "X: %.1f", targetX);
+            Brain.Screen.printAt(15, 160, "Y: %.1f", targetY);
 
-            Brain.Screen.printAt(15, 160, "F: %.1f", ForwardTrackingWheel.position(degrees));
+            Brain.Screen.setFillColor(black);
+            Brain.Screen.setPenColor(white);
+            Brain.Screen.printAt(5, 180, "Error: ");
+
+            Brain.Screen.setPenColor("#EE2A2A");
+            Brain.Screen.printAt(15, 200, "X: %.1f", targetX - globalXPos);
+            Brain.Screen.printAt(15, 220, "Y: %.1f", targetY - globalYPos);
+
+            Brain.Screen.setPenColor("#3099E9");
+            Brain.Screen.printAt(15, 240, "T Head.: %.1f", targetOrientation * (180/M_PI));
+
+            
+            Brain.Screen.setPenColor(red);
+            Brain.Screen.setPenWidth(4);
+            Brain.Screen.drawLine(XOnBrainScreen, YOnbrainScreen, XOnBrainScreen + (headingX * 15), YOnbrainScreen + (headingY * 15));
 
             returnToMainWindowButton.display();
         } else if (screenWindow == "Motors") {
