@@ -92,7 +92,7 @@ int positionTracking() {
             deltaXLocal = deltaSideways;
             deltaYLocal = deltaForward;
         } else { // Else, do some boring math
-            deltaXLocal = 2 * sin(deltaOrientation / 2.0) * ((deltaSideways / deltaOrientation) + SidewaysTrackingDistance); 
+            deltaXLocal = 2 * sin(deltaOrientation / 2.0) * ((deltaSideways / deltaOrientation) + SidewaysTrackingDistance);
             deltaYLocal = 2 * sin(deltaOrientation / 2.0) * ((deltaForward / deltaOrientation) - ForwardTrackingDistance); 
         }
 

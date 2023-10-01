@@ -1,4 +1,5 @@
 #include "Graphics/graphics.h"
+#include "Graphics/Windows/main-window.h"
 
 #include "Autonomous/odometry.h"
 #include "Autonomous/autonomous.h"
@@ -58,154 +59,28 @@ class Button {
 bool screenDebounce = false;
 char * screenWindow = "Main";
 
-void CalibrateInertial() {
-    Inertial.calibrate();
+void drawText(const char* text, int x, int y, fontType font, const char* fillColor, const char* textColor) {
+    Brain.Screen.setFillColor(fillColor);
+    Brain.Screen.setPenColor(textColor);
+    Brain.Screen.setFont(font);
+    Brain.Screen.printAt(x, y, text);
 }
 
-void SwitchToOdometryWindow() {
-    if (screenWindow == "Main") {
-        screenWindow = "Odometry";
-    }
-}
-void SwitchToMotorWindow() {
-    if (screenWindow == "Main") {
-        screenWindow = "Motors";
-    }
-}
-void SwitchToRobotInfoWindow() {
-    if (screenWindow == "Main") {
-        screenWindow = "RobotInfo";
-    }
-}
 void ReturnToMainWindow() {
     if (screenWindow == "Odometry" || screenWindow == "Motors" || screenWindow == "RobotInfo") {
         screenWindow = "Main";
     }
 }
 
-void switchAutonBackward() {
-    autonPath--;
-    if (autonPath < 1) {
-        autonPath = 3;
-    }
-}
-
-void switchAutonForward() {
-  autonPath++;
-    if (autonPath > 3) {
-        autonPath = 1;
-    }  
-}
-
 int updateScreen() {
     Brain.Screen.render();
-
-    Button calibrateInertialButton(125, 15, 140, 30, "Calibrate", "#03a1fc"); // Inertial Calibration Button
-    calibrateInertialButton.setOnClick(CalibrateInertial);
-
-    Button odometryWindowButton(125, 55, 140, 30, "Odometry", "#fcb603"); // Button To Switch To Odometry Window
-    odometryWindowButton.setOnClick(SwitchToOdometryWindow);
-
-    Button motorWindowButton(125, 95, 140, 30, "Motors", "#1cc94d"); // Button To Switch To Motor Window
-    motorWindowButton.setOnClick(SwitchToMotorWindow);
-
-    Button robotInfoWindowButton(125, 135, 140, 30, "Robot Info", "#cf5df5"); // Button To Switch To Robot Info Window
-    robotInfoWindowButton.setOnClick(SwitchToRobotInfoWindow);
 
     Button returnToMainWindowButton(5, 10, 80, 30, "Return", "#ff0f0f"); // Return Button, Shown On All Menus (excluding Main)
     returnToMainWindowButton.setOnClick(ReturnToMainWindow);
 
-
-    Button autonLeft(275, 95, 20, 30, "<", "#E93030");
-    autonLeft.setOnClick(switchAutonBackward);
-
-    Button autonRight(453, 95, 20, 30, ">", "#E93030");
-    autonRight.setOnClick(switchAutonForward);
-
     while (true) {
         if (screenWindow == "Main") {
-            Brain.Screen.setFillColor(black);
-            Brain.Screen.setPenColor(white);
-
-            // Team Logo
-            
-            Brain.Screen.setFont(mono40);
-            Brain.Screen.printAt(290, 55, "Revamped");
-
-            Brain.Screen.setFont(mono20);
-            Brain.Screen.printAt(340, 30, "98548H");
-
-            Brain.Screen.drawLine(290, 60, 460, 60);
-
-            // Odometry
-
-            Brain.Screen.printAt(5, 15, "Odometry: ");
-
-            Brain.Screen.setPenColor("#FFBE0F");
-            Brain.Screen.printAt(15, 35, "X: %.1f", globalXPos);
-            Brain.Screen.printAt(15, 55, "Y: %.1f", globalYPos);
-
-            // Inertial
-
-            Brain.Screen.setFont(mono20);
-            Brain.Screen.setPenColor(white);
-            Brain.Screen.printAt(5, 85, "Inertial:");
-
-            Brain.Screen.setFont(mono20);
-            if (Inertial.installed()) {
-                if (Inertial.isCalibrating()) {
-                    Brain.Screen.setPenColor(yellow);
-                    Brain.Screen.printAt(15, 105, "Clbrtng...");
-                } else {
-                    Brain.Screen.setPenColor(green);
-                    Brain.Screen.printAt(15, 105, "Ready");
-                }
-            } else {
-                Brain.Screen.setPenColor(red);
-                Brain.Screen.printAt(15, 105, "Not Found");
-            }
-
-            // Heading
-
-            Brain.Screen.setFont(mono20);
-            Brain.Screen.setPenColor(white);
-            Brain.Screen.printAt(5, 135, "Heading: ");
-
-            Brain.Screen.setPenColor("#0FFFED");
-            Brain.Screen.printAt(15, 155, "%.1f°", (absoluteOrientation * 180 / M_PI));
-
-            // Suggestions
-
-            Brain.Screen.setPenColor(white);
-            Brain.Screen.printAt(5, 185, "Suggestions:");
-            Brain.Screen.setPenColor(green);
-            Brain.Screen.printAt(15, 205, "None Found");
-
-            calibrateInertialButton.display();
-            odometryWindowButton.display();
-            motorWindowButton.display();
-            robotInfoWindowButton.display();
-            autonLeft.display();
-            autonRight.display();
-
-            // Auton Selector
-
-            Brain.Screen.setFillColor(black);
-            Brain.Screen.setPenColor(white);
-
-            Brain.Screen.setFont(mono20);
-            
-            Brain.Screen.printAt(320, 90, "Autonomous:");
-
-            Brain.Screen.setFont(mono30);
-            if (autonPath == 1) {
-                Brain.Screen.printAt(305, 117, "Home Side");
-            } else if (autonPath == 2) {
-                Brain.Screen.printAt(305, 117, "Away Side");
-            } else if (autonPath == 3) {
-                Brain.Screen.printAt(330, 117, "Skills");
-            }
-            Brain.Screen.drawLine(305, 122, 443, 122);
+            drawMainWindow();
 
         } else if (screenWindow == "Odometry") {
             float robotSize = 10;
@@ -317,25 +192,6 @@ int updateScreen() {
             Brain.Screen.setFillColor(black);
             Brain.Screen.printAt(5, 15, "Woah! Something very bad happened.");
             Brain.Screen.printAt(5, 35, "If you read this, please reset robot.");
-        }
-
-        if (Brain.Screen.pressing()) {
-            if (screenDebounce == false) {
-                screenDebounce = true;
-                int x = Brain.Screen.xPosition();
-                int y = Brain.Screen.yPosition();
-
-                calibrateInertialButton.checkClick(x, y);
-                odometryWindowButton.checkClick(x, y);
-                motorWindowButton.checkClick(x, y);
-                robotInfoWindowButton.checkClick(x, y);
-                returnToMainWindowButton.checkClick(x, y);
-
-                autonLeft.checkClick(x, y);
-                autonRight.checkClick(x, y);
-            }
-        } else {
-            screenDebounce = false;
         }
         
         Brain.Screen.render();
