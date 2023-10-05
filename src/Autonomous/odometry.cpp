@@ -1,5 +1,5 @@
 #include "Autonomous/odometry.h"
-
+#include "Autonomous/autonomous.h"
 
 // CONSTANTS //
 
@@ -8,15 +8,15 @@
 const double WHEEL_RADIUS = 1.375;
 
 // Inertial Orientation in RADIANS
-double startOrientation = 0;
+double startOrientation = 135;
 
 // Start Position. Depends on auton path
-double startXPos = -42.0;
-double startYPos = -66.0;
+double startXPos = -43.0;
+double startYPos = -58.25;
 
 // Wheel Distance from Tracking Center
-double ForwardTrackingDistance = 2.9;
-double SidewaysTrackingDistance = 5.4;
+double ForwardTrackingDistance = 3.125;
+double SidewaysTrackingDistance = 5.35;
 
 
 // CALCULATED VALUES //
@@ -109,4 +109,26 @@ int positionTracking() {
         task::sleep(10);
     }
     return 0;
+}
+
+void setPosition(double x, double y, double heading) {
+    Inertial.setHeading(heading, degrees);
+
+    absoluteOrientation = heading;
+
+    globalXPos = x;
+    globalYPos = y;
+}
+
+void setAuton() {
+    for (int i = 0; i < 5; i++) {
+        if (autonPath == 1) {
+            setPosition(-43, -58.25, 135);
+        } else if (autonPath == 2) {
+        setPosition(20, 20, 180);
+        } else if (autonPath == 3) {
+            setPosition(40, 40, 270);
+        }
+        wait(10, msec);
+    }
 }

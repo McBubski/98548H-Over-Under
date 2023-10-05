@@ -1,5 +1,6 @@
 #include "vex.h"
 #include "Autonomous/autonomous.h"
+#include "Autonomous/odometry.h"
 #include "Autonomous/auton-functions.h"
 #include "Autonomous/PID.h"
 
@@ -20,10 +21,40 @@ void initializeRobot() {
     ForwardTrackingWheel.resetPosition();
     SidewaysTrackingWheel.resetPosition();
     LiftPotentiometer.setPosition(5, degrees);
+
+    Inertial.setHeading(135, degrees);
+}
+
+void homeAuton() {
+    driveFor(-22, 100);
+    turnToHeading(180, 100);
+
+    driveFor(-10, 100);
+    driveFor(2, 100);
+
+    pointAt(-45, -49, 100); // Align To Matchload
+    driveFor(11, 100);
+
+    turnToHeading(45, 100);
+    driveFor(-6, 50); // Pickup Triball
+
+    triball_arm.spinTo(140, degrees, true);
+    driveFor(10, 100);
+
+    triball_arm.spinTo(0, degrees, false);
+    turnToHeading(135, 50);
+
+    driveFor(20, 100);
+
+    turnToHeading(90, 100);
+    triball_arm.spinTo(25, degrees, false);
+    driveFor(16, 80);
+
+    lift.spinTo(650, degrees);
 }
 
 void skills() {
-    driveFor(-9, inches);
+    driveFor(12, 100);
     //puncher.spin(forward, 75, percent);
     //wait(40, seconds);
     //puncher.stop();

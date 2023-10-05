@@ -2,6 +2,6 @@ extern double targetX;
 extern double targetY;
 extern double targetOrientation;
 
-void turnToHeading(double heading);
-void pointAt(double x, double y);
-void driveFor(double distance, distanceUnits unit);
+void turnToHeading(double heading, double turnSpeed);
+void pointAt(double x, double y, double turnSpeed);
+void driveFor(double distance, double speed);

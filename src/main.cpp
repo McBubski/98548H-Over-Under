@@ -17,8 +17,8 @@ void pre_auton(void) {
 void autonomous(void) {
   leftDrive.setStopping(brake);
   rightDrive.setStopping(brake);
-  if (autonPath == 1) { // Skills
-      skills();
+  if (autonPath == 1) { // Home Auton
+      homeAuton();
   }
 }
 
@@ -63,7 +63,7 @@ void drivercontrol(void) {
   lift.setStopping(brake);
   triball_arm.setStopping(brake);
 
-  Controller.ButtonA.pressed(switchPneumatics);
+  //Controller.ButtonA.pressed(switchPneumatics);
   Controller.ButtonB.pressed(toggleArm);
   Controller.ButtonL2.pressed(togglePuncher);
   Controller.ButtonUp.pressed(startLift);
@@ -106,8 +106,11 @@ void drivercontrol(void) {
       triball_arm.spinTo(140, degrees, false);
     }
 
-    elevationPneumatics.set(pneumaticsState); // Wings State
-
+    if (Controller.ButtonL1.pressing()) {
+      elevationPneumatics.set(true);
+    } else {
+      elevationPneumatics.set(false);
+    }
 
     wait(20, msec);
   }
@@ -121,7 +124,7 @@ int main() {
   pre_auton();
 
   task odometryTask = task(positionTracking);
-  task graphicsTask = task(updateScreen);
+  //task graphicsTask = task(updateScreen);
 
   while (true) {
     wait(100, msec);

@@ -15,9 +15,9 @@ double wrapAngleDeg(double angle) {
     return (angle >= 0) ? angle - 180.0 : angle + 180.0;
 }
 
-void turnToHeading(double heading) {
+void turnToHeading(double heading, double turnSpeed) {
     bool notDone = true;
-    PID turnPid = PID(0.6, 0.004, 0.1, 2, 10, 100, &notDone, 2000, 2000);
+    PID turnPid = PID(0.7, 0.004, 0.1, 2, 10, 100, &notDone, 2000, 200);
 
     double error = wrapAngleDeg(heading - Inertial.heading());
     double previousError = error;
@@ -28,8 +28,8 @@ void turnToHeading(double heading) {
 
         double speed = turnPid.Update(error, 10);
 
-        leftDrive.spin(forward, speed, percent);
-        rightDrive.spin(reverse, speed, percent);
+        leftDrive.spin(forward, speed * (turnSpeed / 100), percent);
+        rightDrive.spin(reverse, speed * (turnSpeed / 100), percent);
         wait(10, msec);
     }
 
@@ -37,12 +37,13 @@ void turnToHeading(double heading) {
     rightDrive.stop();
 }
 
-void pointAt(double x, double y) {
+void pointAt(double x, double y, double turnSpeed) {
     targetOrientation = atan2(x - globalXPos, y - globalYPos);
-    turnToHeading(targetOrientation * (180/M_PI));
+    turnToHeading(targetOrientation * (180/M_PI), turnSpeed);
 }
 
-void driveFor(double distance, distanceUnits unit) {
+void driveFor(double distance, double speed) {
+    double startHeading = Inertial.heading();
     double encoderStart = ForwardTrackingWheel.position(turns);
 
     targetX = globalXPos + sin(absoluteOrientation) * distance;
@@ -50,8 +51,8 @@ void driveFor(double distance, distanceUnits unit) {
 
     bool notDone = true;
     bool rotationBool = true;
-    PID drivePID = PID(6, 0.05, 0.02, 0.2, 10, 100, &notDone, 500000000, 500);
-    PID rotationCorrectionPID = PID(0.5, 0, 0, 5, 10, 5, &rotationBool, 5000000,500);
+    PID drivePID = PID(6.5, 0.05, 0.02, 0.2, 10, 100, &notDone, 2000, 100);
+    PID rotationCorrectionPID = PID(0.5, 0, 0, 5, 5, 5, &rotationBool, 2000, 100);
 
     double error = distance;
     double previousError = error;
@@ -65,16 +66,17 @@ void driveFor(double distance, distanceUnits unit) {
 
         double currentTargetOrientation = atan2(targetX - globalXPos,  targetY - globalYPos) * 180 / M_PI;
 
-        double rotationDiff = wrapAngleDeg(currentTargetOrientation - Inertial.heading(degrees));
-
-        double PIDOutput = drivePID.Update(error, 10);
-        double rotationCorrection = (rotationDiff * 0.7);
-        if (error <= 0.5) {
-            rotationCorrection = 0;
+        double rotationDiff;
+        if (error <= 2) {
+            rotationDiff = wrapAngleDeg(startHeading - Inertial.heading(degrees));
+        } else {
+            rotationDiff = wrapAngleDeg(currentTargetOrientation - Inertial.heading(degrees));
         }
+        double PIDOutput = drivePID.Update(error, 10);
+        double rotationCorrection = (rotationDiff * 1);
 
-        leftDrive.spin(forward, (PIDOutput + rotationCorrection) * 0.5, percent);
-        rightDrive.spin(forward, (PIDOutput - rotationCorrection) * 0.5, percent);
+        leftDrive.spin(forward, (PIDOutput + rotationCorrection) * (speed / 100), percent);
+        rightDrive.spin(forward, (PIDOutput - rotationCorrection) * (speed / 100), percent);
 
         Brain.Screen.printAt(50, 50, "%f", rotationDiff);
         wait(10, msec);

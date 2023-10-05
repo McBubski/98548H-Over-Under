@@ -4,5 +4,6 @@
 void initializeRobot();
 void turnToHeading();
 void skills();
+void homeAuton();
 
 extern int autonPath;
