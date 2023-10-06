@@ -36,7 +36,7 @@ void homeAuton() {
     driveFor(11, 100);
 
     turnToHeading(45, 100);
-    driveFor(-6, 50); // Pickup Triball
+    driveFor(-5.5, 50); // Pickup Triball
 
     triball_arm.spinTo(140, degrees, true);
     driveFor(10, 100);
@@ -54,7 +54,8 @@ void homeAuton() {
 }
 
 void skills() {
-    driveFor(12, 100);
+    turnToHeading(225, 100);
+    //driveFor(12, 100);
     //puncher.spin(forward, 75, percent);
     //wait(40, seconds);
     //puncher.stop();

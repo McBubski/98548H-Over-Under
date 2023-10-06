@@ -8,7 +8,7 @@
 /*----------------------------------------------------------------------------*/
 
 #include "vex.h"
-#include "PID.h"
+#include "Autonomous/PID.h"
 
 int GetSign(double number)
 {

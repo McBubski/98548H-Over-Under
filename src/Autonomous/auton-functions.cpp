@@ -17,20 +17,25 @@ double wrapAngleDeg(double angle) {
 
 void turnToHeading(double heading, double turnSpeed) {
     bool notDone = true;
-    PID turnPid = PID(0.7, 0.004, 0.1, 2, 10, 100, &notDone, 2000, 200);
+    PID turnPid = PID(0.65, 0, 0, 2, 10, 100, &notDone, 20000, 200);
 
     double error = wrapAngleDeg(heading - Inertial.heading());
     double previousError = error;
+    double previousTime = Brain.Timer.system();
 
-    while (notDone) {
+    while (true) {
         double error = wrapAngleDeg(heading - Inertial.heading());
         double previousError = error;
 
-        double speed = turnPid.Update(error, 10);
+        double speed = turnPid.Update(error, (Brain.Timer.system() - previousTime));
 
         leftDrive.spin(forward, speed * (turnSpeed / 100), percent);
         rightDrive.spin(reverse, speed * (turnSpeed / 100), percent);
+
+        previousTime = Brain.Timer.system();
+
         wait(10, msec);
+        Brain.Screen.printAt(50, 50, "%f", error);
     }
 
     leftDrive.stop();

@@ -17,8 +17,11 @@ void pre_auton(void) {
 void autonomous(void) {
   leftDrive.setStopping(brake);
   rightDrive.setStopping(brake);
+  drawGraphics = false;
+  skills();
+
   if (autonPath == 1) { // Home Auton
-      homeAuton();
+      //homeAuton();
   }
 }
 
@@ -56,6 +59,7 @@ void toggleArm() {
 }
 
 void drivercontrol(void) {
+  drawGraphics = true;
   leftDrive.setStopping(coast);
   rightDrive.setStopping(coast);
 
@@ -124,7 +128,7 @@ int main() {
   pre_auton();
 
   task odometryTask = task(positionTracking);
-  //task graphicsTask = task(updateScreen);
+  task graphicsTask = task(updateScreen);
 
   while (true) {
     wait(100, msec);
