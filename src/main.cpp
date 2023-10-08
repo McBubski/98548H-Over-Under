@@ -18,10 +18,13 @@ void autonomous(void) {
   leftDrive.setStopping(brake);
   rightDrive.setStopping(brake);
   drawGraphics = false;
-  skills();
 
   if (autonPath == 1) { // Home Auton
-      //homeAuton();
+    homeAuton();
+  } else if (autonPath == 2) {
+    awayAuton();
+  } else if (autonPath == 3) {
+    skills();
   }
 }
 

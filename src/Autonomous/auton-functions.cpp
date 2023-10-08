@@ -15,15 +15,23 @@ double wrapAngleDeg(double angle) {
     return (angle >= 0) ? angle - 180.0 : angle + 180.0;
 }
 
+double getDistance(double x1, double y1, double x2, double y2) {
+    double a = (x1 - x2) * (x1 - x2);
+    double b = (y1 - y2) * (y1 - y2);
+    double dist = sqrt(a + b);
+
+    return dist;
+}
+
 void turnToHeading(double heading, double turnSpeed) {
     bool notDone = true;
-    PID turnPid = PID(0.65, 0, 0, 2, 10, 100, &notDone, 20000, 200);
+    PID turnPid = PID(0.76, 0.0019, 2.6, 2, 8, 100, &notDone, 1000, 300); //0.66, 0.0048, 0.002   0.77, 0.0022, 3.15
 
     double error = wrapAngleDeg(heading - Inertial.heading());
     double previousError = error;
     double previousTime = Brain.Timer.system();
 
-    while (true) {
+    while (notDone) {
         double error = wrapAngleDeg(heading - Inertial.heading());
         double previousError = error;
 
@@ -48,45 +56,49 @@ void pointAt(double x, double y, double turnSpeed) {
 }
 
 void driveFor(double distance, double speed) {
-    double startHeading = Inertial.heading();
+    double targetHeading = Inertial.heading();
     double encoderStart = ForwardTrackingWheel.position(turns);
 
-    targetX = globalXPos + sin(absoluteOrientation) * distance;
-    targetY = globalYPos + cos(absoluteOrientation) * distance;
 
-    bool notDone = true;
-    bool rotationBool = true;
-    PID drivePID = PID(6.5, 0.05, 0.02, 0.2, 10, 100, &notDone, 2000, 100);
-    PID rotationCorrectionPID = PID(0.5, 0, 0, 5, 5, 5, &rotationBool, 2000, 100);
+    bool driving = true;
+    bool turning = true;
+    PID drivePID = PID(8, 0.01, 13.105, 0.2, 10, 100, &driving, 3000, 150);
+    PID turnPID = PID(0.76, 0.0007, 2.86, 2, 8, 80, &turning, 1000, 100);
 
-    double error = distance;
-    double previousError = error;
+    double driveError = distance;
+    double turnError = wrapAngleDeg(targetHeading - Inertial.heading());
 
-    while (notDone) {
+    double previousTime = Brain.Timer.system();
+
+    while (driving) {
         double encoderChange = ForwardTrackingWheel.position(turns) - encoderStart;
         double inchesMoved = encoderChange * 2.75 * M_PI; // Circumference of Wheels
 
-        error = distance - inchesMoved;
-        previousError = error;
+        driveError = distance - inchesMoved;
 
-        double currentTargetOrientation = atan2(targetX - globalXPos,  targetY - globalYPos) * 180 / M_PI;
+        turnError = wrapAngleDeg(targetHeading - Inertial.heading());
 
-        double rotationDiff;
-        if (error <= 2) {
-            rotationDiff = wrapAngleDeg(startHeading - Inertial.heading(degrees));
-        } else {
-            rotationDiff = wrapAngleDeg(currentTargetOrientation - Inertial.heading(degrees));
-        }
-        double PIDOutput = drivePID.Update(error, 10);
-        double rotationCorrection = (rotationDiff * 1);
+        double dt = (Brain.Timer.system() - previousTime);
 
-        leftDrive.spin(forward, (PIDOutput + rotationCorrection) * (speed / 100), percent);
-        rightDrive.spin(forward, (PIDOutput - rotationCorrection) * (speed / 100), percent);
+        double driveOutput = drivePID.Update(driveError, dt);
+        double turnOutput = turnPID.Update(turnError, dt);
 
-        Brain.Screen.printAt(50, 50, "%f", rotationDiff);
+        leftDrive.spin(forward, (driveOutput + turnOutput) * (speed / 100), percent);
+        rightDrive.spin(forward, (driveOutput - turnOutput) * (speed / 100), percent);
+
+        previousTime = Brain.Timer.system();
+
         wait(10, msec);
+
+        Brain.Screen.printAt(50, 50, "%f", driveError);
     }
 
     leftDrive.stop();
     rightDrive.stop();
+}
+
+void driveTo(double x, double y, double speed) {
+    pointAt(x, y, 100);
+    double dist = getDistance(globalXPos, globalYPos, x, y);
+    driveFor(dist, speed);
 }

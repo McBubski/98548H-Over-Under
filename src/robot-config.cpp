@@ -12,7 +12,7 @@ motor driveBL = motor(PORT9, ratio18_1, true);
 motor_group leftDrive = motor_group(driveFL, driveBL);
 
 motor driveFR = motor(PORT16, ratio18_1, false);
-motor driveBR = motor(PORT11, ratio18_1, false);
+motor driveBR = motor(PORT12, ratio18_1, false);
 motor_group rightDrive = motor_group(driveFR, driveBR);
 
 motor liftLeft = motor(PORT20, ratio36_1, true);
@@ -24,8 +24,8 @@ motor triball_arm = motor(PORT14, ratio18_1, false);
 
 smartdrive drive = smartdrive(leftDrive, rightDrive, Inertial, 12.56, 11.625, 10, distanceUnits::in);
 
-rotation ForwardTrackingWheel = rotation(PORT7, false);
-rotation SidewaysTrackingWheel = rotation(PORT12, true);
+rotation ForwardTrackingWheel = rotation(PORT7, true);
+rotation SidewaysTrackingWheel = rotation(PORT11, true);
 rotation LiftPotentiometer = rotation(PORT5, true);
 
 digital_out elevationPneumatics = digital_out(Brain.ThreeWirePort.B);
