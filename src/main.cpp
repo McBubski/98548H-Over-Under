@@ -18,10 +18,13 @@ void autonomous(void) {
   leftDrive.setStopping(brake);
   rightDrive.setStopping(brake);
   drawGraphics = false;
-  skills();
 
   if (autonPath == 1) { // Home Auton
-      //homeAuton();
+    homeAuton();
+  } else if (autonPath == 2) {
+    awayAuton();
+  } else if (autonPath == 3) {
+    skills();
   }
 }
 
@@ -75,23 +78,21 @@ void drivercontrol(void) {
   triball_arm.setVelocity(25, percent);
 
   while (1) {
-    float joystickLeft = Controller.Axis3.position(pct); // Drive Controls
+    // Gets controller position in percent
+    float joystickLeft = Controller.Axis3.position(pct); 
     float joystickRight = Controller.Axis2.position(pct);
 
+    // Maps controller position to motors, also in percent
     leftDrive.spin(forward, joystickLeft, pct);
     rightDrive.spin(forward, joystickRight, pct);
 
 
     if (Controller.ButtonR1.pressing()) { // Moves Lift Up
-      liftMoving = false;
       lift.spin(forward, 100, percent);
     } else if (Controller.ButtonR2.pressing()) { // Moves Lift Down
-      liftMoving = false;
       lift.spin(reverse, 100, percent);
     } else {
-      if (!liftMoving) {
-        lift.stop();
-      }
+      lift.stop();
     }
 
     if (Controller.ButtonL2.pressing()) { // Puncher Controls
@@ -111,9 +112,9 @@ void drivercontrol(void) {
     }
 
     if (Controller.ButtonL1.pressing()) {
-      elevationPneumatics.set(true);
+      wingPneumatics.set(true);
     } else {
-      elevationPneumatics.set(false);
+      wingPneumatics.set(false);
     }
 
     wait(20, msec);
@@ -127,8 +128,8 @@ int main() {
 
   pre_auton();
 
-  task odometryTask = task(positionTracking);
-  task graphicsTask = task(updateScreen);
+  task odometryTask = task(positionTracking); // Starts Odometry
+  task graphicsTask = task(updateScreen); // Starts Graphics
 
   while (true) {
     wait(100, msec);
