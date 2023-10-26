@@ -121,5 +121,18 @@ void setPosition(double x, double y, double heading) {
 }
 
 void setAuton() {
+<<<<<<< HEAD
  
+=======
+    for (int i = 0; i < 5; i++) {
+        if (autonPath == 1) {
+            setPosition(-43, -58.25, 135); // 135~~~~~~~~~~~!!!!!!!!!!!!!!!!!
+        } else if (autonPath == 2) {
+        setPosition(20, 20, 0);
+        } else if (autonPath == 3) {
+            setPosition(-43, -58.25, 135);
+        }
+        wait(10, msec);
+    }
+>>>>>>> 768b2ac8ffd01417197e51bc9c9339eb80077ff4
 }
