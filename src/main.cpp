@@ -61,6 +61,11 @@ void toggleArm() {
   }
 }
 
+void alignForDriverSkills() {
+  driveFor(-6, 100);
+  turnToHeading(237, 100);
+}
+
 void drivercontrol(void) {
   drawGraphics = true;
   leftDrive.setStopping(coast);
@@ -86,6 +91,11 @@ void drivercontrol(void) {
     leftDrive.spin(forward, joystickLeft, pct);
     rightDrive.spin(forward, joystickRight, pct);
 
+    if (Controller.ButtonUp.pressing()) {
+      driveFor(-6, 100);
+      turnToHeading(237, 100);
+    }
+
 
     if (Controller.ButtonR1.pressing()) { // Moves Lift Up
       lift.spin(forward, 100, percent);
@@ -96,7 +106,7 @@ void drivercontrol(void) {
     }
 
     if (Controller.ButtonL2.pressing()) { // Puncher Controls
-      puncher.spin(forward, 75, percent);
+      puncher.spin(forward, 85, percent);
     } else {
       puncher.stop();
     }
