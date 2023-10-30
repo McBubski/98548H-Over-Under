@@ -8,15 +8,15 @@
 const double WHEEL_RADIUS = 1.375;
 
 // Inertial Orientation in RADIANS
-double startOrientation = 2.35619;
+const double startOrientation = 2.35619;
 
 // Start Position. Depends on auton path
-double startXPos = -43.0;
-double startYPos = -58.25;
+const double startXPos = -43.0;
+const double startYPos = -58.25;
 
 // Wheel Distance from Tracking Center
-double ForwardTrackingDistance = 3.125;
-double SidewaysTrackingDistance = 5.35;
+const double ForwardTrackingDistance = 3.125;
+const double SidewaysTrackingDistance = 5.35;
 
 
 // CALCULATED VALUES //
