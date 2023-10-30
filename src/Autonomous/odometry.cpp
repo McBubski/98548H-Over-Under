@@ -82,7 +82,7 @@ int positionTracking() {
         // Calculate robot orientation in RADIANS
         absoluteOrientation = Inertial.heading(rotationUnits::deg) * M_PI / 180.0;
 
-        // Calculates change in angle in RADIANS (Rounds to prevent magnetic interference stuff?)
+        // Calculates change in angle in RADIANS 
         deltaOrientation = absoluteOrientation - previousOrientation;
 
         // Updates previous orientation in RADIANS
