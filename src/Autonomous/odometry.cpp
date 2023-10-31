@@ -8,15 +8,15 @@
 const double WHEEL_RADIUS = 1.375;
 
 // Inertial Orientation in RADIANS
-double startOrientation = 2.35619;
+const double startOrientation = 2.35619;
 
 // Start Position. Depends on auton path
-double startXPos = -43.0;
-double startYPos = -58.25;
+const double startXPos = -43.0;
+const double startYPos = -58.25;
 
 // Wheel Distance from Tracking Center
-double ForwardTrackingDistance = 3.125;
-double SidewaysTrackingDistance = 5.35;
+const double ForwardTrackingDistance = 3.125;
+const double SidewaysTrackingDistance = 5.35;
 
 
 // CALCULATED VALUES //
@@ -82,7 +82,7 @@ int positionTracking() {
         // Calculate robot orientation in RADIANS
         absoluteOrientation = Inertial.heading(rotationUnits::deg) * M_PI / 180.0;
 
-        // Calculates change in angle in RADIANS (Rounds to prevent magnetic interference stuff?)
+        // Calculates change in angle in RADIANS 
         deltaOrientation = absoluteOrientation - previousOrientation;
 
         // Updates previous orientation in RADIANS
@@ -132,3 +132,5 @@ void setAuton() {
         wait(10, msec);
     }
 }
+}
+>>>>>>> abea41ef81d0964119fd9ae8222d28dcc591c473
