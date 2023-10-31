@@ -26,7 +26,10 @@ void initializeRobot() {
 }
 
 void homeAuton() {
-    driveFor(48, 100);
+   driveFor(48, 100);
+   turnToHeading(315, 100);
+   driveFor(48, 100);
+   turnToHeading(135, 100);
     //driveFor(-22, 100);
     //turnToHeading(180, 100); // Align with Goal
 //
@@ -102,7 +105,7 @@ void awayAuton() {
 }
 void skills() {
     driveFor(-6, 100);
-    turnToHeading(237, 100);
+    turnToHeading(239, 100);
     driveFor(1, 100);
 //
     puncher.spin(forward, 85, percent);
@@ -118,7 +121,7 @@ void skills() {
     driveFor(-72, 100);
     turnToHeading(0, 100);
     driveFor(14, 100);
-    pointAt(-12, -20, 100);
+    pointAt(-10, -20, 100);
     driveFor(28, 100);
     //turnToHeading(0, 100);
     //driveFor(10, 100);
@@ -128,15 +131,15 @@ void skills() {
     
     leftDrive.spin(reverse, 100, percent);
     rightDrive.spin(reverse, 100, percent);
-    wait(1000, msec);
+    wait(1200, msec);
     leftDrive.stop();
     rightDrive.stop();
     wingPneumatics.set(false);
 //
-    driveFor(26, 100);
+    driveFor(24, 100);
     turnToHeading(180, 100);
-    driveFor(-42, 100);
-    turnToHeading(300, 100);
+    driveFor(-20, 100);
+    turnToHeading(270, 100);
     wingPneumatics.set(true);
 
     leftDrive.spin(reverse, 100, percent);
@@ -145,9 +148,9 @@ void skills() {
 
     wingPneumatics.set(false);
     driveFor(28,100);
-    turnToHeading(0,100);
-    driveFor(-24, 100);
-    turnToHeading(270, 100);
+    turnToHeading(180,100);
+    driveFor(-36, 100);
+    turnToHeading(300, 100);
 
     // Double Push
 

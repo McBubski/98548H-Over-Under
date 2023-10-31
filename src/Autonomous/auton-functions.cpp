@@ -25,11 +25,12 @@ double getDistance(double x1, double y1, double x2, double y2) {
 
 void turnToHeading(double heading, double turnSpeed) {
     bool notDone = true;
-    PID turnPid = PID(0.76, 0.0019, 2.6, 2, 8, 100, &notDone, 1000, 300); //0.66, 0.0048, 0.002   0.77, 0.0022, 3.15
+    PID turnPid = PID(0.81, 0.002, 3.7545, 2, 8, 100, &notDone, 1000, 300); // 0.76, 0.0019, 2.6
 
     double error = wrapAngleDeg(heading - Inertial.heading());
     double previousError = error;
     double previousTime = Brain.Timer.system();
+
 
     while (notDone) {
         double error = wrapAngleDeg(heading - Inertial.heading());
@@ -62,8 +63,8 @@ void driveFor(double distance, double speed) {
 
     bool driving = true;
     bool turning = true;
-    PID drivePID = PID(8, 0.01, 13.105, 0.2, 10, 100, &driving, 3000, 150);
-    PID turnPID = PID(0.76, 0.0007, 2.86, 2, 8, 80, &turning, 1000, 100);
+    PID drivePID = PID(8, 0.01, 13.105, 0.2, 10, 100, &driving, 2000, 150);
+    PID turnPID = PID(0.9, 0.001, 3, 2, 8, 100, &turning, 2000, 100);
 
     double driveError = distance;
     double turnError = wrapAngleDeg(targetHeading - Inertial.heading());

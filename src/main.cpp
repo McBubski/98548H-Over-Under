@@ -93,7 +93,7 @@ void drivercontrol(void) {
 
     if (Controller.ButtonUp.pressing()) {
       driveFor(-6, 100);
-      turnToHeading(237, 100);
+      turnToHeading(238, 100);
     }
 
 
