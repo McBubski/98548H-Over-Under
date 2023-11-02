@@ -28,6 +28,7 @@ extern rotation SidewaysTrackingWheel;
 extern rotation LiftPotentiometer;
 
 extern digital_out wingPneumatics;
+extern digital_out ballArm;
 
 /**
  * Used to initialize code/tasks/devices added using tools in VEXcode Pro.

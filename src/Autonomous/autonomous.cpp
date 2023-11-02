@@ -26,20 +26,32 @@ void initializeRobot() {
 }
 
 void homeAuton() {
-   driveFor(48, 100);
-   turnToHeading(315, 100);
-   driveFor(48, 100);
-   turnToHeading(135, 100);
-    //driveFor(-22, 100);
-    //turnToHeading(180, 100); // Align with Goal
+   ////driveFor(48, 100);
+   ////turnToHeading(315, 100);
+   ////driveFor(48, 100);
+   ////turnToHeading(135, 100);
+    driveFor(-24, 100);
+    turnToHeading(180, 70); // Align with Goal
 //
-    //leftDrive.spin(reverse, 100, percent);
-    //rightDrive.spin(reverse, 100, percent);
+    leftDrive.spin(reverse, 100, percent);
+    rightDrive.spin(reverse, 100, percent);
 //
-    //wait(500, msec);
+    wait(400, msec);
 //
-    //leftDrive.stop();
-    //rightDrive.stop();
+    leftDrive.stop();
+    rightDrive.stop();
+    
+    driveTo(-59, -41, 100);
+
+    //turnToHeading(325, 100);
+    //ballArm.set(true);
+    //driveFor(-12, 90);
+    //turnToHeading(275, 100);
+//
+    //driveFor(-38, 100);
+    //ballArm.set(false);
+    //turnToHeading(135, 100);
+    //ballArm.set(true);
 //
     //driveFor(4, 100);
 //

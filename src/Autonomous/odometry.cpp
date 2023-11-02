@@ -132,5 +132,3 @@ void setAuton() {
         wait(10, msec);
     }
 }
-}
->>>>>>> abea41ef81d0964119fd9ae8222d28dcc591c473
