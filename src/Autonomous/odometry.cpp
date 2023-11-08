@@ -125,7 +125,7 @@ void setAuton() {
         if (autonPath == 1) {
             setPosition(-43, -58.25, 135); // 135~~~~~~~~~~~!!!!!!!!!!!!!!!!!
         } else if (autonPath == 2) {
-        setPosition(20, 20, 0);
+        setPosition(43, -58.25, 225);
         } else if (autonPath == 3) {
             setPosition(-43, -58.25, 135);
         }

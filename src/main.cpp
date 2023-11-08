@@ -63,13 +63,17 @@ void toggleArm() {
 
 void alignForDriverSkills() {
   driveFor(-6, 100);
-  turnToHeading(237, 100);
+  turnToHeading(239, 100);
 }
 
 void drivercontrol(void) {
+  ballArm.set(false);
+
   drawGraphics = true;
   leftDrive.setStopping(coast);
   rightDrive.setStopping(coast);
+  driveTL.setStopping(coast);
+  driveTR.setStopping(coast);
 
   puncher.setStopping(coast);
   lift.setStopping(brake);
@@ -94,6 +98,7 @@ void drivercontrol(void) {
     if (Controller.ButtonUp.pressing()) {
       driveFor(-6, 100);
       turnToHeading(238, 100);
+      driveFor(1, 100);
     }
 
 

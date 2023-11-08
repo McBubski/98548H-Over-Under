@@ -17,7 +17,7 @@ motor driveTR = motor(PORT3, ratio18_1, true); // Verified
 motor driveBR = motor(PORT15, ratio6_1, false); // Verified
 motor_group rightDrive = motor_group(driveFR, driveTR, driveBR);
 
-motor liftLeft = motor(PORT18, ratio36_1, true); // Verified
+motor liftLeft = motor(PORT12, ratio36_1, true); // Verified
 motor liftRight = motor(PORT20, ratio36_1, false); // Verified
 motor_group lift = motor_group(liftLeft, liftRight);
 

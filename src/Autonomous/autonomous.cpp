@@ -26,22 +26,36 @@ void initializeRobot() {
 }
 
 void homeAuton() {
-   ////driveFor(48, 100);
-   ////turnToHeading(315, 100);
-   ////driveFor(48, 100);
-   ////turnToHeading(135, 100);
-    driveFor(-24, 100);
-    turnToHeading(180, 70); // Align with Goal
-//
+    driveFor(-25, 100);
+    turnToHeading(180, 90); // Align with Goal
+
     leftDrive.spin(reverse, 100, percent);
     rightDrive.spin(reverse, 100, percent);
-//
+
     wait(400, msec);
-//
+
     leftDrive.stop();
     rightDrive.stop();
     
-    driveTo(-59, -41, 100);
+    driveFor(5, 100);
+    driveTo(-61, -41, 100);
+
+    turnToHeading(328, 100);
+    
+    ballArm.set(true);
+
+    driveFor(-15, 100);
+    turnToHeading(285, 100);
+    ballArm.set(false);
+    driveFor(-19, 100);
+    turnToHeading(269, 100);
+    driveFor(-20.5, 100);
+    turnToHeading(180, 100);
+    driveFor(-2, 100);
+    ballArm.set(true);
+    turnToHeading(155, 100);
+
+    // OLD
 
     //turnToHeading(325, 100);
     //ballArm.set(true);
@@ -79,19 +93,21 @@ void homeAuton() {
 }
 
 void awayAuton() {
-    driveFor(-32, 100);
-    driveFor(10, 100);
-    //turnToHeading(0, 100); // Align with Goal
+    turnToHeading(235, 100);
+    ballArm.set(true);
+    driveFor(-14, 100);
+    turnToHeading(195, 100);
+    turnToHeading(225, 100);
+    driveFor(-5, 100);
+    turnToHeading(180, 100);
+    leftDrive.spin(reverse, 100, percent);
+    rightDrive.spin(reverse, 100, percent);
+    wait(1500, msec);
+    leftDrive.stop();
+    rightDrive.stop();
+    ballArm.set(false);
+    driveFor(6, 100);
 
-    //leftDrive.spin(reverse, 100, percent);
-    //rightDrive.spin(reverse, 100, percent);
-
-    //wait(500, msec);
-
-    //leftDrive.stop();
-    //rightDrive.stop();
-
-    //driveFor(4, 100);
 
     //pointAt(-46, -46, 100); // Align To Matchload
     //driveFor(16, 100);
@@ -128,12 +144,12 @@ void skills() {
     turnToHeading(305, 100);
 //
     driveFor(-10, 100);
-    turnToHeading(270, 100);
+    turnToHeading(269, 100);
 //
     driveFor(-72, 100);
     turnToHeading(0, 100);
     driveFor(14, 100);
-    pointAt(-10, -20, 100);
+    pointAt(-10, -15, 100);
     driveFor(28, 100);
     //turnToHeading(0, 100);
     //driveFor(10, 100);
@@ -182,75 +198,5 @@ void skills() {
     driveFor(22, 100);
     wingPneumatics.set(false);
 
-    //pointAt(48, -48, 100);
-    //driveFor(40, 100);
-    //turnToHeading(115, 100);
-
-    //driveFor(18, 100);
-    //turnToHeading(225, 100);
-
-    //leftDrive.spin(reverse, 100, percent);
-    //rightDrive.spin(reverse, 100, percent);
-    //wait(1000, msec);
-    //leftDrive.stop();
-    //rightDrive.stop();
-
-    //driveFor(12, 100);
-
-
-
-
-// OLD!
-
-
-//
-    //driveFor(-52, 100);
-    //wait(3600, msec);
-    //turnTo(-45, 80);
-//
-    //drive.driveFor(-10, inches, false);
-    //wait(1000, msec);
-    //turnTo(80, 80);
-//
-    //drive.driveFor(56, inches, false);
-    //wait(1000, msec);
-    //turnTo(-130, 80);
-//
-    //drive.driveFor(-20, inches, false);
-    //wait(2000, msec);
-    //turnTo(90, 80);
-//
-    //elevationPneumatics.set(true);
-//
-    //drive.setDriveVelocity (-80, percent);
-    //drive.driveFor(-36, inches, false);
-    //wait(1500, msec);
-//
-    //elevationPneumatics.set(false);
-    //drive.driveFor(6, inches, true);
-//
-    //driveFor(-52, 100);
-    //wait(3600, msec);
-    //turnTo(-45, 80);
-//
-    //drive.driveFor(-10, inches, false);
-    //wait(1000, msec);
-    //turnTo(80, 80);
-//
-    //drive.driveFor(56, inches, false);
-    //wait(1000, msec);
-    //turnTo(-130, 80);
-//
-    //drive.driveFor(-20, inches, false);
-    //wait(2000, msec);
-    //turnTo(90, 80);
-//
-    //elevationPneumatics.set(true);
-//
-    //drive.setDriveVelocity (-80, percent);
-    //drive.driveFor(-36, inches, false);
-    //wait(1500, msec);
-//
-    //elevationPneumatics.set(false);
-    //drive.driveFor(6, inches, true);
+   
 }
