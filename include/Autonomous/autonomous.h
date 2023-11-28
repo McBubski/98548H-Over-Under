@@ -8,3 +8,4 @@ void homeAuton();
 void awayAuton();
 
 extern int autonPath;
+extern int allianceColor;

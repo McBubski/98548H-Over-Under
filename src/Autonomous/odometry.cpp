@@ -11,7 +11,7 @@ const double WHEEL_RADIUS = 1.375;
 const double startOrientation = 2.35619;
 
 // Start Position. Depends on auton path
-const double startXPos = -43.0;
+const double startXPos = 43.0;
 const double startYPos = -58.25;
 
 // Wheel Distance from Tracking Center
@@ -114,7 +114,7 @@ int positionTracking() {
 void setPosition(double x, double y, double heading) {
     Inertial.setHeading(heading, degrees);
 
-    absoluteOrientation = heading;
+    absoluteOrientation = heading * M_PI / 180;
 
     globalXPos = x;
     globalYPos = y;
@@ -123,9 +123,9 @@ void setPosition(double x, double y, double heading) {
 void setAuton() {
     for (int i = 0; i < 5; i++) {
         if (autonPath == 1) {
-            setPosition(-43, -58.25, 135); // 135~~~~~~~~~~~!!!!!!!!!!!!!!!!!
+            setPosition(43, -58.25, 135); // 135~~~~~~~~~~~!!!!!!!!!!!!!!!!!
         } else if (autonPath == 2) {
-        setPosition(43, -58.25, 225);
+            setPosition(43, -58.25, 225);
         } else if (autonPath == 3) {
             setPosition(-43, -58.25, 135);
         }

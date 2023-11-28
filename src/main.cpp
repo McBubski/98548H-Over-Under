@@ -12,6 +12,7 @@ competition Competition;
 void pre_auton(void) {
   vexcodeInit();
   initializeRobot();
+  setAuton();
 }
 
 void autonomous(void) {
@@ -63,7 +64,7 @@ void toggleArm() {
 
 void alignForDriverSkills() {
   driveFor(-6, 100);
-  turnToHeading(239, 100);
+  turnToHeading(241, 100);
 }
 
 void drivercontrol(void) {
@@ -96,9 +97,21 @@ void drivercontrol(void) {
     rightDrive.spin(forward, joystickRight, pct);
 
     if (Controller.ButtonUp.pressing()) {
-      driveFor(-6, 100);
-      turnToHeading(238, 100);
-      driveFor(1, 100);
+      driveFor(-25, 100);
+      turnToHeading(180, 90); // Align with Goal
+//  
+      leftDrive.spin(reverse, 100, percent);
+      rightDrive.spin(reverse, 100, percent);
+//  
+      wait(400, msec);
+//  
+      leftDrive.stop();
+      rightDrive.stop();
+
+      driveFor(2, 100);
+
+      driveTo(-52.2, -51.2, 100);
+      turnToHeading(242, 100);
     }
 
 

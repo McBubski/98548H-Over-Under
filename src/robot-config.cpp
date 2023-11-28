@@ -5,7 +5,7 @@ using namespace vex;
 // A global instance of brain used for printing to the V5 brain screen
 brain Brain;
 controller Controller;
-inertial Inertial = inertial(PORT13);
+inertial Inertial = inertial(PORT11);
 
 motor driveFL = motor(PORT16, ratio6_1, true); // Verified
 motor driveTL = motor(PORT14, ratio18_1, true); // Verified

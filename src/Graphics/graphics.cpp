@@ -125,7 +125,7 @@ int updateScreen() {
     autonRight.setOnClick(switchAutonForward);
 
     while (true) {
-        if (drawGraphics) {
+        if (true) {
             if (screenWindow == "Main") {
                 drawText("Revamped", 290, 55, mono40, "#000000", "#ffffff");
                 drawText("98548H", 340, 30, mono20, "#000000", "#ffffff");
@@ -208,14 +208,15 @@ int updateScreen() {
 
                 Brain.Screen.setFillColor("#c4c4c4");
                 Brain.Screen.drawRectangle(262, 22, 194, 194);
-                Brain.Screen.drawImageFromFile("field.png", 260, 20);
+
+                if (allianceColor == 1) {
+                    Brain.Screen.drawImageFromFile("field map red.png", 260, 20);
+                } else if (allianceColor == 2) {
+                    Brain.Screen.drawImageFromFile("field map blue.png", 260, 20);
+                }
 
                 float XOnBrainScreen = 360 + (1.39 * globalXPos);
                 float YOnbrainScreen = 120 + (-1.39 * globalYPos);
-
-                Brain.Screen.setFillColor(red);
-                Brain.Screen.setPenWidth(0);
-                Brain.Screen.drawCircle(360 + 1.39 * targetX, 120 -1.39 * targetY, 4);
 
                 float lineOffset1 = sqrt(2) * robotSize * cos(-absoluteOrientation + M_PI_4);
                 float lineOffset2 = sqrt(2) * robotSize * cos(-absoluteOrientation - M_PI_4);
@@ -278,6 +279,7 @@ int updateScreen() {
             } else if (screenWindow == "RobotInfo") {
                 Brain.Screen.setFillColor(black);
                 Brain.Screen.setPenColor(white);
+                Brain.Screen.setFont(mono20);
 
                 Brain.Screen.printAt(10, 60, "MicroSD Card: ");
 
