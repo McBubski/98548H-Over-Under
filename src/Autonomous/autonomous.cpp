@@ -32,36 +32,36 @@ void initializeRobot() {
 
 void homeAuton() {
     //turnToHeading(0, 100);
-    followPath("Paths/DriveToGoalTest.txt");
+    //followPath("Paths/DriveToGoalTest.txt");
 
-    //driveFor(-25, 100);
-    //turnToHeading(180, 90); // Align with Goal
-////
-    //leftDrive.spin(reverse, 100, percent);
-    //rightDrive.spin(reverse, 100, percent);
-////
-    //wait(400, msec);
-////
-    //leftDrive.stop();
-    //rightDrive.stop();
-    ////
-    //driveFor(5, 100);
-    //driveTo(-61, -41, 100);
-////
-    //turnToHeading(328, 100);
-    ////
-    //ballArm.set(true);
-////
-    //driveFor(-15, 100);
-    //turnToHeading(285, 100);
-    //ballArm.set(false);
-    //driveFor(-19, 100);
-    //turnToHeading(269, 100);
-    //driveFor(-21, 100);
-    //turnToHeading(180, 100);
-    //driveFor(-2, 100);
-    //ballArm.set(true);
-    //turnToHeading(155, 100);
+    driveFor(-25, 100);
+    turnToHeading(180, 90); // Align with Goal
+//
+    leftDrive.spin(reverse, 100, percent);
+    rightDrive.spin(reverse, 100, percent);
+//
+    wait(400, msec);
+//
+    leftDrive.stop();
+    rightDrive.stop();
+    //
+    driveFor(5, 100);
+    driveTo(-61, -41, 100);
+//
+    turnToHeading(328, 100);
+    //
+    ballArm.set(true);
+//
+    driveFor(-15, 100);
+    turnToHeading(285, 100);
+    ballArm.set(false);
+    driveFor(-19, 100);
+    turnToHeading(269, 100);
+    driveFor(-21, 100);
+    turnToHeading(180, 100);
+    driveFor(-2, 100);
+    ballArm.set(true);
+    turnToHeading(155, 100);
 
     // OLD
 
@@ -146,7 +146,7 @@ void skills() {
     leftDrive.spin(reverse, 100, percent);
     rightDrive.spin(reverse, 100, percent);
 //
-    wait(400, msec);
+    wait(300, msec);
 //
     leftDrive.stop();
     rightDrive.stop();
@@ -183,7 +183,7 @@ void skills() {
 
     leftDrive.spin(reverse, 100, percent);
     rightDrive.spin(reverse, 100, percent);
-    wait(1200, msec);
+    wait(1000, msec);
     leftDrive.stop();
     rightDrive.stop();
 
@@ -199,7 +199,7 @@ void skills() {
 
     leftDrive.spin(reverse, 100, percent);
     rightDrive.spin(reverse, 100, percent);
-    wait(1200, msec);
+    wait(1000, msec);
     leftDrive.stop();
     rightDrive.stop();
 

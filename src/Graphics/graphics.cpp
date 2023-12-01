@@ -209,11 +209,11 @@ int updateScreen() {
                 Brain.Screen.setFillColor("#c4c4c4");
                 Brain.Screen.drawRectangle(262, 22, 194, 194);
 
-                if (allianceColor == 1) {
-                    Brain.Screen.drawImageFromFile("field map red.png", 260, 20);
-                } else if (allianceColor == 2) {
-                    Brain.Screen.drawImageFromFile("field map blue.png", 260, 20);
-                }
+                //if (allianceColor == 1) {
+                //    Brain.Screen.drawImageFromFile("field map red.png", 260, 20);
+                //} else if (allianceColor == 2) {
+                //    Brain.Screen.drawImageFromFile("field map blue.png", 260, 20);
+                //}
 
                 float XOnBrainScreen = 360 + (1.39 * globalXPos);
                 float YOnbrainScreen = 120 + (-1.39 * globalYPos);
