@@ -25,7 +25,8 @@ double getDistance(double x1, double y1, double x2, double y2) {
 
 void turnToHeading(double heading, double turnSpeed) {
     bool notDone = true;
-    PID turnPid = PID(0.7815, 0.00635, 3.97, 2, 3, 100, &notDone, 800, 300); // 0.76, 0.0019, 2.6    0.68, 0.0035, 0.57
+    PID turnPid = PID(0.7815, 0.00635, 3.97, 2, 3, 100, &notDone, 600, 100);
+    
     double error = wrapAngleDeg(heading - Inertial.heading());
     double previousError = error;
     double previousTime = Brain.Timer.system();
@@ -42,16 +43,19 @@ void turnToHeading(double heading, double turnSpeed) {
         previousTime = Brain.Timer.system();
 
         wait(10, msec);
-        Brain.Screen.printAt(50, 50, "%f", error);
     }
 
     leftDrive.stop();
     rightDrive.stop();
 }
 
-void pointAt(double x, double y, double turnSpeed) {
+void pointAt(double x, double y, double turnSpeed, vex::directionType dir) {
     targetOrientation = atan2(x - globalXPos, y - globalYPos);
-    turnToHeading(targetOrientation * (180/M_PI), turnSpeed);
+    if (dir == forward) {
+        turnToHeading(targetOrientation * (180/M_PI), turnSpeed);
+    } else if (dir == reverse) {
+        turnToHeading(targetOrientation * (180/M_PI) + 180, turnSpeed);
+    }
 }
 
 void driveFor(double distance, double speed) {
@@ -96,8 +100,16 @@ void driveFor(double distance, double speed) {
     rightDrive.stop();
 }
 
-void driveTo(double x, double y, double speed) {
-    pointAt(x, y, 100);
-    double dist = getDistance(globalXPos, globalYPos, x, y);
-    driveFor(dist, speed);
+void driveTo(double x, double y, double speed, vex::directionType dir) {
+    pointAt(x, y, 100, dir);
+
+    if (dir == forward) {
+        double dist = getDistance(globalXPos, globalYPos, x, y);
+        driveFor(dist, speed);
+    }
+
+    if (dir == reverse) {
+        double dist = getDistance(globalXPos, globalYPos, x, y);
+        driveFor(-dist, speed);
+    }
 }

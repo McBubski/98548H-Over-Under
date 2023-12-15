@@ -38,11 +38,11 @@ class Button {
         }
 
         void display() {
-            Brain.Screen.setPenColor(black);
-            Brain.Screen.setFillColor(color);
+            Brain.Screen.setPenColor(cyan);
+            Brain.Screen.setFillColor(black);
             Brain.Screen.drawRectangle(x, y, width, height);
 
-            Brain.Screen.setPenColor(white);
+            Brain.Screen.setPenColor(cyan);
             Brain.Screen.printAt(
                 x + (width/2) - (Brain.Screen.getStringWidth(label)/2),
                 y + (height/2) + (Brain.Screen.getStringHeight(label)/4),
@@ -61,8 +61,8 @@ bool screenDebounce = false;
 char * screenWindow = "Main";
 
 void drawText(const char* text, int x, int y, fontType font, const char* fillColor, const char* textColor) {
-    Brain.Screen.setFillColor(fillColor);
-    Brain.Screen.setPenColor(textColor);
+    Brain.Screen.setFillColor(black);
+    Brain.Screen.setPenColor(cyan);
     Brain.Screen.setFont(font);
     Brain.Screen.printAt(x, y, text);
 }
@@ -137,45 +137,47 @@ int updateScreen() {
                 drawText("Odometry: ", 5, 15, mono20, "#000000", "#ffffff");
                 drawText("X: ", 15, 35, mono20, "#000000", "#FFBE0f");
 
-                Brain.Screen.setPenColor("#FFBE0F");
+                Brain.Screen.setPenColor(ClrHotPink);
                 Brain.Screen.printAt(15, 35, "X: %.1f", globalXPos);
                 Brain.Screen.printAt(15, 55, "Y: %.1f", globalYPos);
 
                 // Inertial
 
                 Brain.Screen.setFont(mono20);
-                Brain.Screen.setPenColor(white);
+                Brain.Screen.setPenColor(cyan);
                 Brain.Screen.printAt(5, 85, "Inertial:");
 
                 Brain.Screen.setFont(mono20);
                 if (Inertial.installed()) {
                     if (Inertial.isCalibrating()) {
-                        Brain.Screen.setPenColor(yellow);
+                        Brain.Screen.setPenColor(ClrHotPink);
                         Brain.Screen.printAt(15, 105, "Clbrtng...");
                     } else {
-                        Brain.Screen.setPenColor(green);
+                        Brain.Screen.setPenColor(ClrHotPink);
                         Brain.Screen.printAt(15, 105, "Ready");
                     }
                 } else {
-                    Brain.Screen.setPenColor(red);
+                    Brain.Screen.setPenColor(ClrHotPink);
                     Brain.Screen.printAt(15, 105, "Not Found");
                 }
 
                 // Heading
 
                 Brain.Screen.setFont(mono20);
-                Brain.Screen.setPenColor(white);
+                Brain.Screen.setPenColor(cyan);
                 Brain.Screen.printAt(5, 135, "Heading: ");
 
-                Brain.Screen.setPenColor("#0FFFED");
+                Brain.Screen.setPenColor(ClrHotPink);
                 Brain.Screen.printAt(15, 155, "%.1f°", (absoluteOrientation * 180 / M_PI));
 
                 // Suggestions
 
-                Brain.Screen.setPenColor(white);
-                Brain.Screen.printAt(5, 185, "Suggestions:");
-                Brain.Screen.setPenColor(green);
-                Brain.Screen.printAt(15, 205, "None Found");
+                Brain.Screen.setPenColor(cyan);
+                Brain.Screen.printAt(5, 185, "QoTD:");
+                Brain.Screen.setPenColor(ClrHotPink);
+                Brain.Screen.printAt(15, 205, "'Winners are just losers who win!'");
+
+                Brain.Screen.setPenWidth(2);
 
                 calibrateInertialButton.display();
                 odometryWindowButton.display();
@@ -187,7 +189,7 @@ int updateScreen() {
                 // Auton Selector
 
                 Brain.Screen.setFillColor(black);
-                Brain.Screen.setPenColor(white);
+                Brain.Screen.setPenColor(cyan);
 
                 Brain.Screen.setFont(mono20);
 
@@ -214,6 +216,8 @@ int updateScreen() {
                 //} else if (allianceColor == 2) {
                 //    Brain.Screen.drawImageFromFile("field map blue.png", 260, 20);
                 //}
+
+                Brain.Screen.drawImageFromFile("field.png", 260, 20);
 
                 float XOnBrainScreen = 360 + (1.39 * globalXPos);
                 float YOnbrainScreen = 120 + (-1.39 * globalYPos);

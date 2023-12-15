@@ -46,7 +46,7 @@ void homeAuton() {
     rightDrive.stop();
     //
     driveFor(5, 100);
-    driveTo(-61, -41, 100);
+    driveTo(-61, -41, 100, forward);
 //
     turnToHeading(328, 100);
     //
@@ -146,25 +146,23 @@ void skills() {
     leftDrive.spin(reverse, 100, percent);
     rightDrive.spin(reverse, 100, percent);
 //
-    wait(300, msec);
+    wait(400, msec);
 //
     leftDrive.stop();
     rightDrive.stop();
 
-    driveFor(2, 100);
-
-    driveTo(-52.5, -51.5, 100);
-    turnToHeading(241, 100);
+    driveTo(-52.5, -51.5, 100, forward);
+    turnToHeading(242.5, 100);
 
     puncher.spin(forward, 95, percent);
     wait(31, seconds);
     puncher.stop();
 
-    driveTo(-38, -60, 100);
-    driveTo(32, -60, 100);
-    driveTo(32, -40, 100);
-    driveTo(10, -26, 100);
-    driveTo(10, -2, 100);
+    driveTo(-38, -60, 100, reverse);
+    driveTo(32, -60, 100, reverse);
+    driveTo(32, -40, 100, reverse);
+    driveTo(10, -26, 100, reverse);
+    driveTo(10, 0, 100, reverse);
 
     turnToHeading(270, 100);
 
@@ -174,8 +172,8 @@ void skills() {
     leftDrive.stop();
     rightDrive.stop();
 
-    driveTo(10, -2, 100);
-    driveTo(10, -33, 100);
+    driveTo(10, -2, 100, forward);
+    driveTo(8, -33, 100, reverse);
 
     turnToHeading(230, 100);
 
@@ -183,28 +181,58 @@ void skills() {
 
     leftDrive.spin(reverse, 100, percent);
     rightDrive.spin(reverse, 100, percent);
-    wait(1000, msec);
+    wait(1100, msec);
     leftDrive.stop();
     rightDrive.stop();
 
     wingPneumatics.set(false);
 
     //driveFor(6, 100);
-    driveTo(10.5, -2, 100);
+    driveTo(9, -2, 100, forward);
 
-    driveTo(10.5, 33, 100);
+    driveTo(8, 27, 100, reverse);
     turnToHeading(310, 100);
 
     wingPneumatics.set(true);
 
     leftDrive.spin(reverse, 100, percent);
     rightDrive.spin(reverse, 100, percent);
-    wait(1000, msec);
+    wait(1100, msec);
     leftDrive.stop();
     rightDrive.stop();
 
     wingPneumatics.set(false);  
     driveFor(6, 100);
+
+    driveTo(22, 0, 100, forward);
+
+    turnToHeading(270, 100);
+
+    wingPneumatics.set(true);
+
+    leftDrive.spin(reverse, 100, percent);
+    rightDrive.spin(reverse, 100, percent);
+    wait(800, msec);
+    leftDrive.stop();
+    rightDrive.stop();   
+
+    wingPneumatics.set(false);
+    driveFor(6, 100);
+
+   //driveTo(36, 60, 100, reverse);
+   //driveTo(60, 40, 100, reverse);
+
+   //turnToHeading(0, 100);
+
+   //leftDrive.spin(reverse, 100, percent);
+   //rightDrive.spin(reverse, 100, percent);
+   //wait(650, msec);
+   //leftDrive.stop();
+   //rightDrive.stop();
+
+   //driveFor(6, 100);
+
+    // ASDASDASD
 
     //driveFor(-6, 100);
     //turnToHeading(240, 100);

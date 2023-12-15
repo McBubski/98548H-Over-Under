@@ -103,15 +103,13 @@ void drivercontrol(void) {
       leftDrive.spin(reverse, 100, percent);
       rightDrive.spin(reverse, 100, percent);
 //  
-      wait(300, msec);
+      wait(400, msec);
 //  
       leftDrive.stop();
       rightDrive.stop();
   
-      driveFor(2, 100);
-  
-      driveTo(-52.5, -51.5, 100);
-      turnToHeading(241, 100);
+      driveTo(-52.5, -51.5, 100, forward);
+      turnToHeading(242.5, 100);
     }
 
 
